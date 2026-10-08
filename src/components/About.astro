@@ -1,0 +1,101 @@
+---
+import { Picture } from 'astro:assets';
+import aboutImg from '../assets/home/about.jpg';
+---
+
+<section class="about container" id="about" aria-labelledby="about-title">
+  <div class="about-text">
+    <h2 id="about-title" class="h2">Some brands last for decades. <br class="br-lg" />I wanted to know why.</h2>
+    <div class="body about-copy">
+      <p>I'm Stefan, and I've loved history and drawing since I was a kid, <br class="br-lg" />so design became the place where the two finally met.</p>
+      <p>I found my place in Brand Identity Design, and over the past 6+ years, <br class="br-lg" />I've worked on 70+ projects for clients around the world.</p>
+      <p>
+        I work with owners of premium products and services who already do things properly, but whose brand hasn't
+        caught up yet. For them, I build a complete brand system they can run on their own for years, long after project
+        ends.
+      </p>
+      <p>When I'm not designing, I'm in the woods and fields with my dog, <br class="br-lg" />or out hunting.</p>
+      <p>I live in Serbia, in the countryside, and a rooster wakes me up <br class="br-lg" />early in the morning. Sometimes too early.</p>
+    </div>
+    <p class="serif-caption about-tagline">Built for generations. Not trends.</p>
+  </div>
+  <div class="about-media">
+    <Picture
+      src={aboutImg}
+      alt="Stefan in profile, wearing glasses and a dark jacket"
+      widths={[482, 720, 964]}
+      sizes="(min-width: 1080px) 482px, 100vw"
+      formats={['avif', 'webp']}
+    />
+  </div>
+</section>
+
+<style>
+  .about {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px 40px 40px var(--inset);
+    background: var(--dark-2);
+    border: 1px solid var(--dark-2);
+    border-radius: 3px;
+  }
+  .about-text {
+    padding-top: 60px;
+    max-width: 522px;
+  }
+  .about-copy {
+    margin-top: 28px;
+  }
+  .about-copy p + p {
+    margin-top: 17px;
+  }
+  .about-tagline {
+    margin-top: 28px;
+    color: var(--accent-3);
+  }
+  .about-media {
+    flex: 0 0 482px;
+    height: 520px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .about-media :global(picture),
+  .about-media :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+  .about-media :global(img) {
+    object-fit: cover;
+  }
+
+  @media (max-width: 1079px) {
+    .about {
+      flex-direction: column;
+      padding: 40px;
+    }
+    .about-text {
+      padding-top: 0;
+      max-width: 600px;
+    }
+    .about-media {
+      flex: none;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 482 / 520;
+      max-width: 520px;
+    }
+    .br-lg {
+      display: none;
+    }
+  }
+  @media (max-width: 767px) {
+    .about {
+      padding: 28px 20px 20px;
+      gap: 32px;
+    }
+    .about-tagline {
+      font-size: 22px;
+    }
+  }
+</style>

@@ -1,0 +1,198 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+  wide?: boolean;
+  /** Award seal (Dva lica) */
+  seal?: boolean;
+  eager?: boolean;
+}
+const { project, wide = false, seal = false, eager = false } = Astro.props;
+const sealFiles = import.meta.glob<string>('../assets/logos/award-seal.svg', { query: '?raw', import: 'default', eager: true });
+const sealSvg = Object.values(sealFiles)[0];
+---
+
+<a href={`/case-study/${project.slug}/`} class:list={['card', { 'card--wide': wide }]}>
+  <div class="card-media">
+    <Picture
+      src={project.thumbnail}
+      alt=""
+      widths={wide ? [640, 960, 1280, 1920, 2560] : [480, 630, 960, 1260]}
+      sizes={wide ? '(min-width: 1360px) 1280px, 100vw' : '(min-width: 1360px) 630px, (min-width: 768px) 50vw, 100vw'}
+      formats={['avif', 'webp']}
+      loading={eager ? 'eager' : 'lazy'}
+      style={project.thumbnailPosition ? `object-position:${project.thumbnailPosition}` : undefined}
+    />
+  </div>
+  <span class="card-btn">
+    Case Study
+    <Icon name="arrow-outward" size={20} />
+  </span>
+  {
+    seal && sealSvg && (
+      <span class="card-seal" aria-label="Award winning design 2025" set:html={sealSvg} />
+    )
+  }
+  <div class="card-info">
+    <div class="card-client">
+      <h3 class="h2">{project.name}</h3>
+      <p class="body">{project.description}</p>
+    </div>
+    <ul class="card-cats caption" aria-label="Services">
+      {project.categories.map((c) => <li>{c}</li>)}
+    </ul>
+  </div>
+</a>
+
+<style>
+  .card {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    border-radius: 2px;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--dark-2);
+  }
+  .card--wide {
+    aspect-ratio: 1280 / 560;
+  }
+  .card-media,
+  .card-media :global(picture),
+  .card-media :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .card-media :global(img) {
+    object-fit: cover;
+    transform: scale(1);
+    transition: transform 0.9s var(--ease);
+    will-change: transform;
+  }
+  @media (hover: hover) {
+    .card:hover .card-media :global(img) {
+      transform: scale(1.06);
+    }
+    .card:hover .card-btn {
+      background: var(--accent-4);
+      color: var(--light-1);
+    }
+  }
+  .card:focus-visible {
+    outline-offset: 4px;
+  }
+
+  .card-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 11px 8px 14px;
+    border-radius: 2px;
+    background: rgba(57, 55, 54, 0.4);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: var(--light-2);
+    font-size: 12px;
+    line-height: 1;
+    transition:
+      background-color 0.25s var(--ease),
+      color 0.25s var(--ease);
+  }
+
+  .card-seal {
+    position: absolute;
+    top: 40px;
+    left: calc(590 / 1280 * 100%);
+    width: 120.4px;
+    height: 120px;
+  }
+  .card-seal :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-info {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 590px;
+  }
+  .card-client {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .card-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--light-4);
+  }
+  .card-cats li + li::before {
+    content: '•';
+    margin-right: 20px;
+  }
+
+  @media (max-width: 1079px) {
+    .card {
+      aspect-ratio: 4 / 3;
+    }
+    .card--wide {
+      aspect-ratio: 16 / 10;
+    }
+    .card-seal {
+      left: auto;
+      right: 32px;
+      top: 32px;
+      width: 96px;
+      height: 96px;
+    }
+  }
+  @media (max-width: 767px) {
+    .card,
+    .card--wide {
+      aspect-ratio: 4 / 5;
+    }
+    .card-info {
+      left: 16px;
+      right: 16px;
+      bottom: 24px;
+      gap: 20px;
+    }
+    .card-btn {
+      top: 16px;
+      left: 16px;
+    }
+    .card-client {
+      gap: 12px;
+    }
+    .card-cats {
+      gap: 6px 8px;
+      font-size: 11px;
+    }
+    .card-cats li + li::before {
+      margin-right: 8px;
+    }
+    .card-seal {
+      right: 20px;
+      top: 20px;
+      width: 80px;
+      height: 80px;
+    }
+  }
+</style>

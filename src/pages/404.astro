@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found" hideCta>
+  <section class="container nf">
+    <h1 class="h1">This page doesn’t exist.</h1>
+    <p class="body">The link may be old, or the page has moved.</p>
+    <a href="/" class="btn btn-primary">Back to home</a>
+  </section>
+</Base>
+
+<style>
+  .nf { padding-block: calc(var(--nav-h) + 160px) 200px; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+</style>

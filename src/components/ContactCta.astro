@@ -1,0 +1,104 @@
+---
+import { site } from '../data/site';
+import ukusiLogo from '../assets/logos/ukusi-morave.svg?raw';
+
+// The 2nd and 3rd client logos come from Figma exports (src/assets/logos/cta-2.svg, cta-3.svg).
+const extra = import.meta.glob<string>('../assets/logos/cta-*.svg', { query: '?raw', import: 'default', eager: true });
+const tint = (svg: string) => svg.replace(/\sfill="(?!none)[^"]*"/g, ' fill="currentColor"');
+
+const logos = [
+  { svg: tint(ukusiLogo), bg: '#331718', label: 'Ukusi Morave' },
+  { svg: extra['../assets/logos/cta-2.svg'], bg: '#0f2a22', label: 'Client logo' },
+  { svg: extra['../assets/logos/cta-3.svg'], bg: '#2a2826', label: 'Client logo' },
+];
+---
+
+<section class="cta" id="contact" aria-labelledby="cta-title">
+  <div class="cta-logos" aria-hidden="true">
+    {
+      logos.map((l) =>
+        l.svg && l.svg.includes('<rect') ? (
+          <span class="cta-logo cta-logo--full" set:html={l.svg} />
+        ) : (
+          <span class="cta-logo" style={`background:${l.bg}`} set:html={l.svg ?? ''} />
+        ),
+      )
+    }
+  </div>
+
+  <h2 id="cta-title" class="h1 cta-title">If it’s meant to last, it should <br class="br-desktop" />be designed that way.</h2>
+
+  <div class="cta-buttons">
+    <a href={site.assessmentUrl} class="btn btn-primary">The Assessment</a>
+    <button type="button" class="btn btn-secondary" data-copy-email aria-label={`Copy email address ${site.email}`}>
+      <span data-copy-label>Click to copy mail</span>
+    </button>
+  </div>
+
+  <p class="caption cta-price">Projects start from 3000€</p>
+</section>
+
+<style>
+  .cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-inline: var(--gutter);
+  }
+  .cta-logos {
+    display: flex;
+    gap: 20px;
+  }
+  .cta-logo {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 3px;
+    color: var(--light-2);
+    overflow: hidden;
+  }
+  .cta-logo :global(svg) {
+    height: 27px;
+    width: auto;
+  }
+  .cta-logo--full :global(svg) {
+    width: 64px;
+    height: 64px;
+  }
+  .cta-title {
+    margin-top: var(--space-sm);
+    max-width: 560px;
+    line-height: normal;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 17px;
+    margin-top: var(--space-md);
+  }
+  .cta-buttons .btn-primary {
+    min-width: 186px;
+  }
+  .cta-buttons .btn-secondary {
+    min-width: 191px;
+  }
+  .cta-price {
+    margin-top: 56px;
+    color: var(--light-3);
+  }
+  @media (max-width: 767px) {
+    .br-desktop {
+      display: none;
+    }
+    .cta-buttons {
+      flex-direction: column;
+      width: 100%;
+      max-width: 360px;
+      gap: 12px;
+    }
+    .cta-price {
+      margin-top: 32px;
+    }
+  }
+</style>

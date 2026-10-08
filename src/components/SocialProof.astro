@@ -1,0 +1,220 @@
+---
+import { Image } from 'astro:assets';
+import serge from '../assets/clients/serge.jpg';
+import nebojsa from '../assets/clients/nebojsa.jpg';
+import filipSandra from '../assets/clients/filip-sandra.jpg';
+
+// Social Proof 2 in Figma: three states, 5s each, progress drawn around the active client photo.
+const items = [
+  {
+    photo: serge,
+    outcome: 'The master brand identity was extended across the sub-brands, creating a clear visual connection between them.',
+    outcomeSize: 28,
+    quote: '“100% professional. Demonstrates creative, conceptual, and strategic design thinking.”',
+    quoteColor: 'var(--light-1)',
+    name: 'Serge Cvetković',
+    position: 'Founder of MASTER',
+  },
+  {
+    photo: nebojsa,
+    outcome: 'Winner of the Grand Gold Medal <br class="br-lg">for Design in 2025.',
+    outcomeSize: 28,
+    quote:
+      '“Stefan managed to translate the character of our spirit, our way of working, and the emotion behind the brand into packaging that carries the soul of our rakija.”',
+    quoteColor: 'var(--light-secondary)',
+    name: 'Nebojša Rakić',
+    position: 'Co-Founder of Dva lica Distillery',
+  },
+  {
+    photo: filipSandra,
+    outcome: 'A packaging design that looks and feels distinctly different from everything else in the category.',
+    outcomeSize: 28,
+    quote:
+      '“Stefan turned our story into authentic packaging with creativity, care, and a clear understanding of our vision and story.”',
+    quoteColor: 'var(--light-secondary)',
+    name: 'Filip & Sandra Jeremić',
+    position: 'Founders of Pčelinja čast Honey',
+  },
+];
+---
+
+<section class="sp container" data-rotator data-interval="5000" aria-label="Client results">
+  <div class="sp-proof">
+    <div class="sp-count">
+      <span class="sp-value">52</span>
+      <span class="sp-label">Clients transformed their<br />brand successfully</span>
+    </div>
+    <div class="sp-clients">
+      {
+        items.map((it, i) => (
+          <button type="button" class="sp-client" data-goto aria-label={`Show result for ${it.name}`}>
+            <Image src={it.photo} alt="" width={56} height={56} densities={[1, 2]} />
+            <svg class="sp-stroke" viewBox="0 0 56 56" aria-hidden="true">
+              <rect x="1" y="1" width="54" height="54" rx="2" pathLength="100" data-stroke />
+            </svg>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sp-stage">
+    {
+      items.map((it, i) => (
+        <article class:list={['sp-slide', { 'is-active': i === 0 }]} data-slide>
+          <div class="sp-outcome">
+            <p class="eyebrow">Outcome</p>
+            <p class="sp-outcome-text" style={`--size:${it.outcomeSize}px`} set:html={it.outcome} />
+          </div>
+          <hr class="divider" />
+          <blockquote class="sp-testimonial">
+            <p class="sp-quote" style={`color:${it.quoteColor}`}>{it.quote}</p>
+            <footer class="sp-person">
+              <cite class="sp-name">{it.name}</cite>
+              <span class="caption sp-position">{it.position}</span>
+            </footer>
+          </blockquote>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .sp {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    padding-inline: var(--inset);
+  }
+  .sp-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-3);
+    white-space: nowrap;
+  }
+  .sp-value {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .sp-label {
+    font-size: 12px;
+    line-height: 1;
+  }
+  .sp-clients {
+    display: flex;
+    gap: 20px;
+    margin-top: 28px;
+  }
+  .sp-client {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .sp-client :global(img) {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 3px;
+    filter: grayscale(0.15) brightness(0.85);
+    transition: filter 0.3s var(--ease);
+  }
+  .sp-client.is-active :global(img),
+  .sp-client:hover :global(img) {
+    filter: none;
+  }
+  .sp-stroke {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .sp-stroke rect {
+    fill: none;
+    stroke: var(--accent-3);
+    stroke-width: 2;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+  }
+
+  .sp-stage {
+    display: grid;
+    width: 522px;
+    flex-shrink: 0;
+  }
+  .sp-slide {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s var(--ease),
+      visibility 0s linear 0.3s;
+  }
+  .sp-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.45s var(--ease) 0.3s,
+      visibility 0s;
+  }
+  .sp-outcome {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .sp-outcome-text {
+    font-size: var(--size);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--light-1);
+  }
+  .sp-testimonial {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .sp-quote {
+    font-size: var(--quote-lg);
+    line-height: normal;
+  }
+  .sp-person {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .sp-name {
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--light-2);
+  }
+  .sp-position {
+    color: var(--light-3);
+  }
+
+  @media (max-width: 1079px) {
+    .sp {
+      flex-direction: column;
+      gap: 40px;
+    }
+    .sp-stage {
+      width: 100%;
+    }
+    .sp-outcome-text {
+      font-size: var(--outcome);
+    }
+    :global(.sp .br-lg) {
+      display: none;
+    }
+  }
+</style>

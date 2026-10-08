@@ -1,0 +1,378 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import CaseImage from '../../components/CaseImage.astro';
+import Icon from '../../components/Icon.astro';
+import { projects, getNextProject, type Project } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+interface Props {
+  project: Project;
+}
+const { project: p } = Astro.props;
+const next = getNextProject(p.slug);
+const img = p.images;
+const alt = p.imageAlts;
+---
+
+<Base title={`${p.name} Case Study`} description={p.summary}>
+  <article class="cs">
+    <!-- Hero -->
+    <header class="container cs-hero">
+      <span class="cs-logo" style={`height:${p.logoHeight}px`} aria-label={`${p.name} logo`} set:html={p.logoSvg} />
+      <div class="cs-intro">
+        <h1 class="h1 cs-title">{p.title}</h1>
+        <p class="body cs-summary">{p.summary}</p>
+      </div>
+      <hr class="divider cs-rule" />
+      <dl class="cs-details">
+        {
+          p.details.map((d) => (
+            <div>
+              <dt class="caption">{d.label}</dt>
+              <dd class="caption">{d.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </header>
+
+    <div class="container cs-xl">
+      <CaseImage src={img[0]} alt={alt[0]} ratio="1280/640" eager />
+    </div>
+
+    <!-- Challenge + Outcome -->
+    <section class="container cs-xl cs-challenge" aria-label="Challenge and outcome">
+      <div class="cs-challenge-text">
+        <h2 class="h2">Challenge</h2>
+        <div class="body cs-paras">
+          {p.challenge.map((para) => <p>{para}</p>)}
+        </div>
+      </div>
+      <div class="cs-outcome">
+        <p class="cs-outcome-text">{p.outcome}</p>
+        <hr class="divider" />
+        <blockquote class="cs-testimonial">
+          <div class="stars" aria-label="5 out of 5 stars">
+            {Array.from({ length: 5 }, () => <Icon name="star" size={24} />)}
+          </div>
+          <p class="cs-quote">“{p.testimonial.quote}”</p>
+          <footer class="cs-person">
+            <cite class="cs-name">{p.testimonial.name}</cite>
+            <span class="caption cs-position">{p.testimonial.position}</span>
+          </footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <div class="container cs-xl">
+      <CaseImage src={img[1]} alt={alt[1]} ratio="1280/560" label="Creative Direction" />
+    </div>
+
+    <!-- Solution 1 -->
+    <section class="container cs-lg" aria-labelledby="sol-1">
+      <div class="cs-solution">
+        <h2 id="sol-1" class="h2">{p.solutions[0].title}</h2>
+        <p class="body">{p.solutions[0].text}</p>
+      </div>
+      <div class="cs-pair">
+        <CaseImage src={img[2]} alt={alt[2]} ratio="1/1" half />
+        <CaseImage src={img[3]} alt={alt[3]} ratio="1/1" half />
+      </div>
+      <div class="cs-gap">
+        <CaseImage src={img[4]} alt={alt[4]} ratio="1280/560" />
+      </div>
+    </section>
+
+    <!-- Solution 2 -->
+    <section class="container cs-lg" aria-labelledby="sol-2">
+      <div class="cs-solution">
+        <h2 id="sol-2" class="h2">{p.solutions[1].title}</h2>
+        <p class="body">{p.solutions[1].text}</p>
+      </div>
+      <div class="cs-pair">
+        <CaseImage src={img[5]} alt={alt[5]} ratio="1/1" half />
+        <CaseImage src={img[6]} alt={alt[6]} ratio="1/1" half />
+      </div>
+    </section>
+
+    <!-- Solution 3 -->
+    <section class="container cs-lg" aria-labelledby="sol-3">
+      <div class="cs-solution">
+        <h2 id="sol-3" class="h2">{p.solutions[2].title}</h2>
+        <p class="body">{p.solutions[2].text}</p>
+      </div>
+      <div class="cs-media">
+        <CaseImage src={img[7]} alt={alt[7]} ratio="1280/640" />
+      </div>
+    </section>
+
+    <!-- Solution 4 -->
+    <section class="container cs-lg" aria-labelledby="sol-4">
+      <div class="cs-solution">
+        <h2 id="sol-4" class="h2">{p.solutions[3].title}</h2>
+        <p class="body">{p.solutions[3].text}</p>
+      </div>
+      <div class="cs-media">
+        <CaseImage src={img[8]} alt={alt[8]} ratio="1280/640" />
+      </div>
+      <div class="cs-gap">
+        <CaseImage src={img[9]} alt={alt[9]} ratio="1280/640" />
+      </div>
+    </section>
+
+    <hr class="divider container cs-end-rule" />
+
+    <!-- Next case study -->
+    <a href={`/case-study/${next.slug}/`} class="cs-next">
+      <div class="cs-next-thumb">
+        <Picture
+          src={next.thumbnail}
+          alt=""
+          widths={[197, 394, 591]}
+          sizes="197px"
+          formats={['avif', 'webp']}
+          style={next.thumbnailPosition ? `object-position:${next.thumbnailPosition}` : undefined}
+        />
+      </div>
+      <div class="cs-next-text">
+        <p class="eyebrow">Next case study</p>
+        <p class="h2 cs-next-name">{next.name}</p>
+        <p class="body">{next.description}</p>
+      </div>
+    </a>
+  </article>
+</Base>
+
+<style>
+  /* Hero */
+  .cs-hero {
+    padding-top: calc(var(--nav-h) + 80px);
+  }
+  .cs-logo {
+    display: flex;
+    align-items: center;
+  }
+  .cs-logo :global(svg) {
+    height: 100%;
+    width: auto;
+  }
+  .cs-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 630px) minmax(0, 522px);
+    column-gap: 20px;
+    align-items: center;
+    margin-top: 28px;
+  }
+  .cs-rule {
+    margin-top: 40px;
+  }
+  .cs-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 40px;
+    margin: 28px 0 0;
+  }
+  .cs-details dt {
+    color: var(--light-4);
+  }
+  .cs-details dd {
+    margin: 8px 0 0;
+    color: var(--light-2);
+  }
+
+  .cs-xl {
+    margin-top: var(--space-xl);
+  }
+  .cs-lg {
+    margin-top: var(--space-lg);
+  }
+
+  /* Challenge + outcome */
+  .cs-challenge {
+    display: grid;
+    grid-template-columns: minmax(0, 630px) minmax(0, 522px);
+    column-gap: 20px;
+    align-items: center;
+  }
+  .cs-challenge-text {
+    padding-left: var(--inset);
+    max-width: calc(413px + var(--inset));
+  }
+  .cs-paras {
+    margin-top: 28px;
+  }
+  .cs-paras p + p {
+    margin-top: 17px;
+  }
+  .cs-outcome {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .cs-outcome-text {
+    font-size: var(--outcome);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--light-1);
+  }
+  .cs-testimonial {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .cs-quote {
+    font-size: var(--quote-lg);
+    line-height: normal;
+    color: var(--light-secondary);
+  }
+  .cs-person {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cs-name {
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--light-2);
+  }
+  .cs-position {
+    color: var(--light-3);
+  }
+
+  /* Solutions */
+  .cs-solution {
+    max-width: 738px;
+  }
+  .cs-solution .body {
+    margin-top: 28px;
+    max-width: 414px;
+  }
+  .cs-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .cs-media {
+    margin-top: 40px;
+  }
+  .cs-gap {
+    margin-top: 20px;
+  }
+
+  /* Next case study */
+  .cs-end-rule {
+    margin: var(--space-xl) auto 0;
+  }
+  .cs-next {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: min(630px, 100% - 2 * var(--gutter));
+    margin: var(--space-lg) auto 0;
+    padding: 28px;
+    border: 1px solid var(--dark-2);
+    border-radius: 3px;
+    transition: border-color 0.3s var(--ease);
+  }
+  .cs-next-thumb {
+    flex: 0 0 197px;
+    height: 197px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .cs-next-thumb :global(picture),
+  .cs-next-thumb :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+  .cs-next-thumb :global(img) {
+    object-fit: cover;
+    transition: transform 0.9s var(--ease);
+  }
+  .cs-next-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .cs-next-name {
+    margin-top: 28px;
+  }
+  .cs-next-text .body {
+    margin-top: 16px;
+  }
+  @media (hover: hover) {
+    .cs-next:hover {
+      border-color: var(--dark-3);
+    }
+    .cs-next:hover .cs-next-thumb :global(img) {
+      transform: scale(1.06);
+    }
+  }
+
+  @media (max-width: 1079px) {
+    .cs-intro {
+      grid-template-columns: 1fr;
+      row-gap: 24px;
+    }
+    .cs-challenge {
+      grid-template-columns: 1fr;
+      row-gap: 56px;
+    }
+    .cs-challenge-text {
+      max-width: none;
+    }
+  }
+  @media (max-width: 767px) {
+    .cs-hero {
+      padding-top: calc(var(--nav-h) + 48px);
+    }
+    .cs-intro {
+      margin-top: 24px;
+    }
+    .cs-rule {
+      margin-top: 32px;
+    }
+    .cs-details {
+      gap: 16px 28px;
+      margin-top: 24px;
+    }
+    .cs-solution .body {
+      margin-top: 20px;
+    }
+    .cs-pair {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .cs-media {
+      margin-top: 32px;
+    }
+    .cs-gap {
+      margin-top: 16px;
+    }
+    .cs-outcome {
+      gap: 32px;
+    }
+    .cs-next {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 20px;
+    }
+    .cs-next-thumb {
+      flex: none;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+    }
+    .cs-next-name {
+      margin-top: 20px;
+    }
+  }
+</style>

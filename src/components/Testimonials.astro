@@ -1,0 +1,253 @@
+---
+import Icon from './Icon.astro';
+import witchkraft from '../assets/logos/client-witchkraft.svg?raw';
+import startup from '../assets/logos/client-startup.svg?raw';
+import sac from '../assets/logos/client-sac.svg?raw';
+
+const items = [
+  {
+    quote:
+      '“I chose Stefan for branding and design, and he exceeded expectations by understanding my vision and delivering a result that reflects the brand’s identity.”',
+    name: 'Aleksandar Manojlović',
+    position: 'Founder of WitchKraft Brewery',
+    logo: witchkraft,
+    logoW: 38.5,
+    logoH: 48,
+  },
+  {
+    quote:
+      '“Stefan delivers professional, creative design that combines clear context with a distinctive personal signature, consistently going beyond aesthetics to meet client needs.”',
+    name: 'Milena Radović',
+    position: 'Marketing Lead at Regional Startup Innovation Center',
+    logo: startup,
+    logoW: 56,
+    logoH: 26.5,
+  },
+  {
+    quote:
+      '“Stefan seamlessly blends traditional motifs with modern design, delivering a striking brand identity that attracts attentions and earns positive feedback.”',
+    name: 'Jovica Šajatović',
+    position: 'President of SAC Stevan Sinđelić',
+    logo: sac,
+    logoW: 31.44,
+    logoH: 40,
+  },
+];
+---
+
+<section class="tm" aria-labelledby="tm-title" data-carousel>
+  <div class="container tm-head">
+    <h2 id="tm-title" class="h2">What clients have to say</h2>
+    <div class="tm-arrows">
+      <button type="button" class="arrow arrow--prev" data-prev aria-label="Previous testimonial">
+        <Icon name="arrow-forward" size={20} />
+      </button>
+      <button type="button" class="arrow" data-next aria-label="Next testimonial">
+        <Icon name="arrow-forward" size={20} />
+      </button>
+    </div>
+  </div>
+
+  <div class="tm-track" data-track tabindex="0" aria-label="Testimonials, scroll horizontally">
+    {
+      items.map((t) => (
+        <figure class="tm-card">
+          <div class="stars" aria-label="5 out of 5 stars">
+            {Array.from({ length: 5 }, () => (
+              <Icon name="star" size={24} />
+            ))}
+          </div>
+          <blockquote class="tm-quote">{t.quote}</blockquote>
+          <figcaption class="tm-client">
+            <span class="tm-logo" style={`width:${t.logoW}px;height:${t.logoH}px`} set:html={t.logo} />
+            <span class="tm-person">
+              <span class="tm-name">{t.name}</span>
+              <span class="caption tm-position">{t.position}</span>
+            </span>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    const step = () => {
+      const card = track.querySelector<HTMLElement>('.tm-card');
+      return card ? card.offsetWidth + 20 : track.clientWidth * 0.8;
+    };
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max;
+    };
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+
+    // Drag to scroll with a mouse (touch devices scroll natively)
+    let startX = 0;
+    let startScroll = 0;
+    let dragging = false;
+    let moved = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      dragging = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.setPointerCapture(e.pointerId);
+      track.classList.add('is-dragging');
+    });
+    track.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 3) moved = true;
+      track.scrollLeft = startScroll - dx;
+    });
+    const end = (e: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      track.classList.remove('is-dragging');
+      if (track.hasPointerCapture(e.pointerId)) track.releasePointerCapture(e.pointerId);
+    };
+    track.addEventListener('pointerup', end);
+    track.addEventListener('pointercancel', end);
+    track.addEventListener('click', (e) => moved && e.preventDefault(), true);
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') next.click();
+      if (e.key === 'ArrowLeft') prev.click();
+    });
+  });
+</script>
+
+<style>
+  .tm-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .tm-head .h2 {
+    padding-top: 4px;
+  }
+  .tm-arrows {
+    display: flex;
+    gap: 20px;
+  }
+  .arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--dark-3);
+    border-radius: 2px;
+    color: var(--light-4);
+    transition:
+      border-color 0.2s var(--ease),
+      color 0.2s var(--ease),
+      opacity 0.2s var(--ease);
+  }
+  .arrow--prev :global(svg) {
+    transform: scaleX(-1);
+  }
+  @media (hover: hover) {
+    .arrow:not(:disabled):hover {
+      border-color: var(--accent-3);
+      color: var(--light-1);
+    }
+  }
+  .arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .tm-track {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+    padding-inline: max(var(--gutter), (100% - var(--content)) / 2);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: max(var(--gutter), (100% - var(--content)) / 2);
+    scrollbar-width: none;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tm-track::-webkit-scrollbar {
+    display: none;
+  }
+  .tm-track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
+  .tm-card {
+    flex: 0 0 522px;
+    margin: 0;
+    padding: 40px;
+    border: 1px solid var(--dark-2);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    scroll-snap-align: start;
+  }
+  .tm-quote {
+    margin: 0;
+    font-size: var(--quote-md);
+    line-height: normal;
+    color: var(--light-2);
+    flex: 1;
+  }
+  .tm-client {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .tm-logo {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+  }
+  .tm-logo :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .tm-person {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tm-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--light-3);
+  }
+  .tm-position {
+    color: var(--light-4);
+  }
+
+  @media (max-width: 767px) {
+    .tm-head {
+      align-items: flex-end;
+    }
+    .tm-arrows {
+      gap: 12px;
+    }
+    .tm-track {
+      margin-top: 28px;
+    }
+    .tm-card {
+      flex-basis: min(86vw, 522px);
+      padding: 28px 24px;
+      gap: 24px;
+    }
+  }
+</style>

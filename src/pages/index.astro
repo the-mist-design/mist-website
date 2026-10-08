@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SocialProof from '../components/SocialProof.astro';
+import About from '../components/About.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Icon from '../components/Icon.astro';
+import { projects } from '../data/projects';
+
+const [ukusi, master, dvaLica] = projects;
+---
+
+<Base>
+  <Hero />
+
+  <section class="projects container" id="projects" aria-labelledby="projects-title">
+    <h2 id="projects-title" class="h2 projects-title">Selected Projects</h2>
+    <div class="projects-grid">
+      <ProjectCard project={ukusi} />
+      <ProjectCard project={master} />
+    </div>
+  </section>
+
+  <section class="quote container" aria-label="Client testimonial">
+    <div class="stars" aria-label="5 out of 5 stars">
+      {Array.from({ length: 5 }, () => <Icon name="star" size={24} />)}
+    </div>
+    <blockquote class="quote-text">
+      “Stefan perfectly blended the traditions of our region with clean, timeless design, beautifully reflecting
+      authentic quality. Pure professionalism!”
+    </blockquote>
+    <p class="quote-person">
+      <span class="quote-name">Ivana Todorov</span>
+      <span class="caption quote-position">Marketing Lead at Ukusi Morave</span>
+    </p>
+  </section>
+
+  <div class="container project-wide">
+    <ProjectCard project={dvaLica} wide seal />
+    <!-- "View All Projects" is hidden until the All Projects page is ready -->
+  </div>
+
+  <div class="section-xl"><SocialProof /></div>
+  <div class="section-xl"><About /></div>
+  <div class="section-xl"><Testimonials /></div>
+</Base>
+
+<style>
+  .projects {
+    padding-top: 72px;
+  }
+  .projects-title {
+    padding-left: 3px;
+  }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .quote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    max-width: 640px;
+    margin-top: 88px;
+    text-align: center;
+  }
+  .quote-text {
+    margin: 0;
+    font-size: var(--quote-lg);
+    line-height: normal;
+    color: var(--light-1);
+  }
+  .quote-person {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .quote-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--light-2);
+  }
+  .quote-position {
+    color: var(--light-3);
+  }
+
+  .project-wide {
+    margin-top: var(--space-lg);
+  }
+  .section-xl {
+    margin-top: var(--space-xl);
+  }
+
+  @media (max-width: 1079px) {
+    .projects {
+      padding-top: 0;
+    }
+    .projects-grid {
+      grid-template-columns: 1fr;
+      margin-top: 32px;
+    }
+    .quote {
+      margin-top: var(--space-lg);
+      padding-inline: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    .projects {
+      padding-top: 64px;
+    }
+    .projects-title {
+      padding-left: 0;
+    }
+    .projects-grid {
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .quote {
+      gap: 24px;
+    }
+  }
+</style>

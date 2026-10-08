@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="The Positioning Brief" description="The Assessment: a short questionnaire about your business, followed by a written assessment of your brand's position." hideCta>
+  <section class="container brief">
+    <p class="serif-caption brief-eyebrow">The Assessment</p>
+    <h1 class="h1 brief-title">The Positioning Brief</h1>
+    <hr class="divider brief-rule" />
+    <div class="body brief-copy">
+      <p>Before I can tell you what your brand needs, I need to understand what your business is trying to become.</p>
+      <p>Six minutes. Most of it is multiple choice.</p>
+      <p><strong>You'll receive a written assessment of your brand's position within three working days.</strong> There's no cost, and no obligation on either side.</p>
+    </div>
+    <p class="brief-soon">The questionnaire opens soon.</p>
+  </section>
+</Base>
+
+<style>
+  .brief { padding-block: calc(var(--nav-h) + 120px) 160px; padding-left: var(--inset); }
+  .brief > * { max-width: 414px; }
+  .brief-eyebrow { color: var(--accent-3); }
+  .brief-title { margin-top: 12px; font-size: 48px; line-height: 1; }
+  .brief-rule { margin-top: 28px; border-top-color: var(--dark-3); }
+  .brief-copy { margin-top: 28px; }
+  .brief-copy p + p { margin-top: 17px; }
+  .brief-copy strong { font-weight: 600; color: var(--light-1); }
+  .brief-soon { margin-top: 28px; font-style: italic; color: var(--light-4); }
+  @media (max-width: 767px) { .brief-title { font-size: 36px; } }
+</style>

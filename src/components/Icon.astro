@@ -1,0 +1,31 @@
+---
+// Inline SVG icon. Colors follow `currentColor`, size via props.
+const icons = import.meta.glob<string>('../icons/*.svg', { query: '?raw', import: 'default', eager: true });
+
+interface Props {
+  name: string;
+  size?: number;
+  width?: number;
+  height?: number;
+  class?: string;
+}
+const { name, size = 24, width, height, class: className } = Astro.props;
+const raw = icons[`../icons/${name}.svg`];
+if (!raw) throw new Error(`Icon not found: ${name}`);
+
+const svg = raw
+  .replace(/<\?xml[^>]*\?>/g, '')
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/<title>[\s\S]*?<\/title>/g, '')
+  .replace(/\sfill="(?!none)[^"]*"/g, ' fill="currentColor"')
+  .replace(/<svg([^>]*)\swidth="[^"]*"/, '<svg$1')
+  .replace(/<svg([^>]*)\sheight="[^"]*"/, '<svg$1')
+  .replace(
+    /<svg/,
+    `<svg width="${width ?? size}" height="${height ?? size}" aria-hidden="true" focusable="false"${className ? ` class="${className}"` : ''}`,
+  )
+  // svgs without any fill attribute (TikTok path) inherit from the root
+  .replace(/<svg([^>]*)>/, (m, attrs) => (attrs.includes('fill=') ? m : `<svg${attrs} fill="currentColor">`));
+---
+
+<Fragment set:html={svg} />

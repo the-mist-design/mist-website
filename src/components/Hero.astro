@@ -1,0 +1,231 @@
+---
+import { Picture } from 'astro:assets';
+import heroImg from '../assets/home/hero.jpg';
+
+const proofs = [
+  { value: '2', label: ['Design', 'Awards'] },
+  { value: '70+', label: ['Completed', 'Projects'] },
+  { value: '6+', label: ['Years of', 'Experience'] },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-media">
+    <Picture
+      src={heroImg}
+      alt="Stefan, brand identity designer behind MIST, arms crossed against a warm textured wall"
+      widths={[640, 960, 1440, 1920]}
+      sizes="100vw"
+      formats={['avif', 'webp']}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-inner">
+      <div class="proof-rotator" data-rotator data-interval="3000" aria-live="off">
+        <div class="proof-stage">
+          {
+            proofs.map((p, i) => (
+              <div class:list={['proof', { 'is-active': i === 0 }]} data-slide aria-hidden={i === 0 ? 'false' : 'true'}>
+                <span class="proof-value">{p.value}</span>
+                <span class="proof-label">
+                  {p.label[0]}
+                  <br />
+                  {p.label[1]}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+        <div class="progress" aria-hidden="true"><span data-progress></span></div>
+      </div>
+
+      <h1 id="hero-title" class="h1 hero-title">
+        Brand Identity &amp; Packaging <br class="br-lg" />Design for Brands Built to Last
+      </h1>
+
+      <p class="body hero-copy">
+        I'm Stefan, a designer with 6+ years of experience and 70+ projects worldwide. I work with business owners who
+        already do things right, but whose brand hasn't caught up yet. What I build isn't decoration; it's a complete
+        system <br class="br-lg" />made to last for generations, not trends.
+      </p>
+
+      <hr class="hero-divider" />
+
+      <div class="proof proof--static">
+        <span class="proof-value">52</span>
+        <span class="proof-label">Clients transformed their<br />brand successfully</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    height: 760px;
+    overflow: hidden;
+  }
+  .hero-media,
+  .hero-media :global(picture),
+  .hero-media :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-media :global(img) {
+    object-fit: cover;
+    object-position: center top;
+  }
+  .hero-content {
+    position: relative;
+    width: min(var(--content), 100% - 2 * var(--gutter));
+    margin-inline: auto;
+    padding-top: 201px;
+  }
+  .hero-inner {
+    margin-left: var(--inset);
+    max-width: 584px;
+  }
+
+  /* Social proof */
+  .proof {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .proof-value {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--light-2);
+  }
+  .proof-label {
+    font-size: 12px;
+    line-height: 1;
+    color: var(--light-3);
+  }
+  .proof--static .proof-value,
+  .proof--static .proof-label {
+    color: var(--accent-3);
+  }
+
+  .proof-stage {
+    display: grid;
+    height: 32px;
+  }
+  .proof-stage .proof {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.25s var(--ease),
+      transform 0.25s var(--ease);
+  }
+  .proof-stage .proof.is-active {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.4s var(--ease) 0.25s,
+      transform 0.4s var(--ease) 0.25s;
+  }
+
+  .progress {
+    position: relative;
+    width: 160px;
+    height: 2px;
+    margin-top: 28px;
+    background: var(--dark-1);
+    overflow: hidden;
+  }
+  .progress span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: var(--accent-3);
+  }
+
+  .hero-title {
+    margin-top: 40px;
+  }
+  .hero-copy {
+    margin-top: 28px;
+    max-width: 530px;
+  }
+  .hero-divider {
+    width: 310px;
+    max-width: 100%;
+    margin: 40px 0 28px;
+    border: 0;
+    border-top: 1px solid rgba(85, 84, 82, 0.6);
+  }
+
+  @media (max-width: 1079px) {
+    .hero {
+      height: auto;
+      min-height: 680px;
+    }
+    .hero-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(18, 18, 18, 0.85) 0%, rgba(18, 18, 18, 0.55) 50%, rgba(18, 18, 18, 0) 70%);
+    }
+    .hero-content {
+      padding-block: calc(var(--nav-h) + 96px) 96px;
+    }
+    .hero-inner {
+      max-width: 460px;
+    }
+    .br-lg {
+      display: none;
+    }
+  }
+
+  /* Tablet: the photo is scaled so the figure (≈72.5% across the photo) sits in the middle of the screen. */
+  @media (min-width: 768px) and (max-width: 1079px) {
+    .hero-media :global(img) {
+      left: 50%;
+      right: auto;
+      width: 180vw;
+      max-width: none;
+      transform: translateX(-72.5%);
+      object-position: center top;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero {
+      min-height: 0;
+    }
+    .hero-media {
+      position: relative;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      max-height: 78vh;
+    }
+    .hero-media::after {
+      background: linear-gradient(180deg, rgba(18, 18, 18, 0) 55%, rgba(18, 18, 18, 1) 100%);
+    }
+    .hero-media :global(img) {
+      object-position: 90% 30%;
+    }
+    .hero-content {
+      margin-top: -96px;
+      padding-block: 0 8px;
+    }
+    .hero-title {
+      margin-top: 32px;
+    }
+    .hero-copy {
+      margin-top: 20px;
+    }
+    .hero-divider {
+      margin: 32px 0 24px;
+    }
+  }
+</style>
