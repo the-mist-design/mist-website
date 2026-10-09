@@ -25,7 +25,7 @@ Potreban je Node 22.
 | Boje, fontovi, razmaci | `src/styles/global.css` (`:root`) |
 | Hero, Social Proof, About, Testimonials | `src/components/` |
 
-**Dva lica, Image 1:** stavi fajl `src/assets/case/dva-lica/img-1.jpg` (2560 × 1280). Dok fajla nema, na tom mestu stoji prazan template.
+Ako neka slika case studija (`img-N.jpg`) nedostaje, na tom mestu stoji prazan template.
 
 Slike se pri build-u automatski smanjuju i pretvaraju u AVIF/WebP, pa originale možeš ubaciti u punoj rezoluciji.
 

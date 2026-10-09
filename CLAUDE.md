@@ -24,7 +24,6 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja≈
 
 ## Poznate otvorene stavke (nisu gre≈°ke)
 
-- Dva lica, Image 1: prazan template dok ne stigne `src/assets/case/dva-lica/img-1.jpg`.
 - The Positioning Brief (upitnik + Google Sheets + mejlovi) je za sada samo placeholder strana.
 - "View All Projects" i All Projects strana su sakriveni.
 - Email `hello@mistdesign.co` je privremen. Prava adresa se menja u `src/data/site.ts`.

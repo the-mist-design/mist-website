@@ -154,13 +154,13 @@ p {
 /* ───────── Type ───────── */
 .h1 {
   font-size: var(--h1);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.2;
   color: var(--light-1);
 }
 .h2 {
   font-size: var(--h2);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
   color: var(--light-1);
 }
@@ -197,7 +197,7 @@ p {
   padding: 12px 36px;
   border-radius: 3px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: normal;
   white-space: nowrap;
   transition:
