@@ -24,7 +24,7 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 
 ## Poznate otvorene stavke (nisu greške)
 
-- The Positioning Brief (upitnik + Google Sheets + mejlovi) je za sada samo placeholder strana.
+- The Positioning Brief: upitnik je napravljen po Figmi, ali Submit još ništa ne šalje. Čeka email adresu i Confirmation tekst (pa Google Sheets + mejlovi).
 - "View All Projects" i All Projects strana su sakriveni.
 - Email `hello@mistdesign.co` je privremen. Prava adresa se menja u `src/data/site.ts`.
 - LinkedIn link, Privacy Policy, cookie banner i Google Analytics dolaze kasnije.

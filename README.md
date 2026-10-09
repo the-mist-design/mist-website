@@ -57,7 +57,7 @@ Za brz pregled bez Git-a: `npm run build`, pa prevuci folder `dist` na https://a
 
 ## Još nije urađeno
 
-- The Positioning Brief (upitnik + Google Sheets). Za sada postoji samo placeholder strana.
+- The Positioning Brief: upitnik (4 sekcije) radi, ali slanje odgovora (Submit → email / Google Sheets) i Confirmation poruka još nisu povezani.
 - All Projects strana. Dugme "View All Projects" je sakriveno.
 - Privacy Policy, cookie banner i Google Analytics.
 - LinkedIn link.
