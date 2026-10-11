@@ -1,0 +1,980 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+// Copy and structure follow the Figma "Opening Screen" and "Questionnaire" components (Sections 1–5).
+type Question =
+  | {
+      type: 'text';
+      name: string;
+      label: string;
+      aside?: string;
+      hint?: string;
+      placeholder?: string;
+      optional?: boolean;
+      multiline?: boolean;
+      inputType?: string;
+      autocomplete?: string;
+    }
+  | { type: 'radio' | 'checkbox'; name: string; label: string; aside?: string; hint?: string; options: string[]; other?: boolean; optional?: boolean }
+  | { type: 'consent'; name: string; lines: string[] };
+
+interface Section {
+  title: string;
+  /** Section is shown only when this question has one of these answers. */
+  showIf?: { name: string; values: string[] };
+  questions: Question[];
+}
+
+const sections: Section[] = [
+  {
+    title: 'Who you are',
+    questions: [
+      { type: 'text', name: 'full_name', label: 'Full name', autocomplete: 'name' },
+      { type: 'text', name: 'business_name', label: 'Business name', autocomplete: 'organization' },
+      { type: 'text', name: 'email', label: 'Business email', inputType: 'email', autocomplete: 'email' },
+      {
+        type: 'consent',
+        name: 'consent',
+        lines: ['I agree to receive my review and occasional emails from MIST.', 'I can unsubscribe at any time.'],
+      },
+      {
+        type: 'text',
+        name: 'phone',
+        label: 'Phone or WhatsApp',
+        aside: '(Optional)',
+        hint: 'Some things are easier to clear up in two messages than in ten emails.',
+        optional: true,
+        inputType: 'tel',
+        autocomplete: 'tel',
+      },
+      {
+        type: 'text',
+        name: 'website',
+        label: 'Website or Instagram',
+        aside: '(Optional)',
+        hint: "Leave blank if you don't have one yet. That's not a problem. That's often the reason people are here.",
+        optional: true,
+        autocomplete: 'url',
+      },
+    ],
+  },
+  {
+    title: 'The Business',
+    questions: [
+      { type: 'text', name: 'what_you_sell', label: 'What do you sell?', hint: "One sentence. If it takes more, that's worth knowing too.", multiline: true },
+      {
+        type: 'radio',
+        name: 'category',
+        label: 'Category',
+        options: ['Food & Drink', 'Spirits & Distillery', 'Hospitality (restaurant, hotel, lounge)', 'Farms & Ranches', 'Hunting & Equestrian'],
+        other: true,
+      },
+      { type: 'radio', name: 'physical_product', label: 'Do you sell a physical product?', options: ['Yes, a product', 'No, a service or a place', 'Both'] },
+      {
+        type: 'radio',
+        name: 'stage',
+        label: 'Where is the business now?',
+        options: ['Starting from zero - nothing built yet', 'Running 1–3 years', 'Established, but the brand feels behind', "Established, and it's time for a full rebrand"],
+      },
+      {
+        type: 'radio',
+        name: 'price',
+        label: 'Where do you sit on price?',
+        hint: "How you price shapes how you should look. That's why I ask.",
+        options: ['The most expensive in our category', 'Above average', 'Around average', "We don't compete on price"],
+      },
+    ],
+  },
+  {
+    title: 'The Product',
+    showIf: { name: 'physical_product', values: ['Yes, a product', 'Both'] },
+    questions: [
+      {
+        type: 'radio',
+        name: 'product_count',
+        label: 'How many products do you sell today?',
+        hint: 'Count every product and size separately e.g. Gin in 0.7 L and 1 L counts as two.',
+        options: ['One', '2-5', '6-15', 'More than 15'],
+      },
+      {
+        type: 'radio',
+        name: 'range_growth',
+        label: 'Will the range grow in the next two or three years?',
+        options: ['No, it stays as it is', 'Yes, a few new products', 'Yes, new product lines or new markets', 'Not sure yet'],
+      },
+      {
+        type: 'checkbox',
+        name: 'where_bought',
+        label: 'Where do people buy it?',
+        aside: '(Select all that apply)',
+        hint: 'A bottle on a shelf has three seconds. A bottle on a website has a photo. They need different things.',
+        options: ['On a shelf, in shops and markets', 'In our own shop or venue', 'Online', 'In restaurants, bars and hotels', 'Abroad, through export', 'Directly from us'],
+      },
+      {
+        type: 'radio',
+        name: 'packaging',
+        label: 'How is it packed today?',
+        options: ["We have packaging we're happy with", "We have packaging, but it's not right", 'Plain or generic packaging', "Nothing yet, we're starting"],
+      },
+    ],
+  },
+  {
+    title: 'The Gap',
+    questions: [
+      {
+        type: 'text',
+        name: 'customer',
+        label: 'Describe one real customer.',
+        aside: '(Two sentences)',
+        hint: "Not age and location. One person who bought from you and came back. If you're just starting, describe the person you're building this for.",
+        multiline: true,
+      },
+      { type: 'text', name: 'why_you', label: 'Why do they choose you instead of the alternative?', aside: '(Two sentences)', multiline: true },
+      {
+        type: 'checkbox',
+        name: 'not_working',
+        label: "What isn't working right now?",
+        aside: '(Select all that apply)',
+        options: [
+          "People don't understand what we do",
+          'We look smaller than we are',
+          "We can't charge what we're worth",
+          'We look like everyone else',
+          "The right people don't find us",
+          "Our packaging doesn't show the quality inside",
+          "Our products don't look like one family",
+          "We've grown, and the brand hasn't",
+        ],
+      },
+      {
+        type: 'checkbox',
+        name: 'tried',
+        label: 'What have you tried so far?',
+        aside: '(Select all that apply)',
+        options: ['Nothing yet', 'We did it ourselves', 'A friend or a freelancer', 'An agency', 'Our printer or packaging supplier designed it', 'Templates or online tools'],
+      },
+      {
+        type: 'text',
+        name: 'why_now',
+        label: 'Why now?',
+        aside: '(One or two sentences)',
+        hint: 'Something usually happens first. A new product, a new market, a price increase, a competitor. What was it for you?',
+        multiline: true,
+      },
+      {
+        type: 'text',
+        name: 'year_from_now',
+        label: "A year from now, the gap is closed. What's different?",
+        aside: '(One or two sentences)',
+        hint: 'In business terms. More orders, a higher price, a new market, a different kind of customer.',
+        multiline: true,
+      },
+      {
+        type: 'text',
+        name: 'competitors',
+        label: 'Name two competitors you respect.',
+        hint: "Respect, not dislike. The brands you admire say more about where you're going.",
+        multiline: true,
+      },
+      { type: 'text', name: 'place', label: 'If your brand were a place, what would it be?', aside: '(Optional, one line)', optional: true },
+    ],
+  },
+  {
+    title: 'Reality',
+    questions: [
+      { type: 'radio', name: 'timeline', label: 'When do you want this done?', options: ['Within 30 days', '1–3 months', '3–6 months', "I'm looking ahead, no fixed date"] },
+      {
+        type: 'radio',
+        name: 'budget',
+        label: 'What have you set aside for this?',
+        hint: "An honest answer saves us both time. For reference, my projects start at €3,000. If you're not sure, choose the last option.",
+        options: ['Under €2,000', '€2,000 – 3,000', '€3,000 – 5,000', '€6,000 – 9,000', '€10,000+', "I'd like guidance on this"],
+      },
+      { type: 'radio', name: 'decision', label: 'Who makes the final decision?', options: ['I decide alone', 'I decide with a partner', 'A board or team decides'] },
+      {
+        type: 'text',
+        name: 'files',
+        label: "Anything you'd like me to see?",
+        aside: '(Optional)',
+        hint: 'Your current labels, photos from the shelf, a brand you admire. Anything helps.',
+        placeholder: 'WeTransfer link',
+        optional: true,
+      },
+      {
+        type: 'checkbox',
+        name: 'found_via',
+        label: 'How did you find MIST?',
+        aside: '(Optional)',
+        options: ['Instagram', 'TikTok', 'A recommendation', 'Google', 'Other'],
+        optional: true,
+      },
+    ],
+  },
+];
+
+const { gapReview } = site;
+---
+
+<Base
+  title={gapReview.label}
+  description="Most good businesses have a gap between what they are and how they look. This brief helps me find yours."
+  hideCta
+>
+  <section class="container gr" data-gap-review data-state="default">
+    <!-- Opening Screen: Default before the brief starts, Active once it has -->
+    <div class="gr-open">
+      <h1 class="h1">{gapReview.label}</h1>
+      <hr class="divider gr-rule" />
+      <div class="body gr-copy">
+        <p data-default>Most good businesses have a gap between what they are and how they look. This brief helps me find yours.</p>
+        <p>About seven minutes. Most of it is multiple choice.</p>
+        <p data-default>Within three working days, you'll receive a written review of your brand:</p>
+        <ul data-default>
+          <li>where it stands today, measured on seven points</li>
+          <li>the one thing that costs you the most</li>
+          <li>what I would do about it, and what it would cost</li>
+          <li>two changes you can make this week, without me</li>
+        </ul>
+        <p data-default>There's no fee, and no obligation on either side.</p>
+      </div>
+      <hr class="divider gr-rule" data-default />
+      <p class="body gr-note" data-default>
+        <em>I read every brief myself and reply to everyone.<br />A full review goes to the businesses I can actually help.</em>
+      </p>
+      <button type="button" class="btn btn-primary gr-start" data-default data-start>Start the Brief</button>
+    </div>
+
+    <form class="qn" data-brief novalidate hidden>
+      {
+        sections.map((section, s) => (
+          <fieldset
+            class="qn-section"
+            data-section
+            data-show-if={section.showIf?.name}
+            data-show-values={section.showIf?.values.join('|')}
+            hidden={s > 0}
+            aria-labelledby={`section-${s + 1}`}
+          >
+            <div class="qn-title">
+              <p class="eyebrow" data-section-number>
+                Section {s + 1}
+              </p>
+              <h2 class="h2" id={`section-${s + 1}`} tabindex="-1" data-section-title>
+                {section.title}
+              </h2>
+            </div>
+            <div class="qn-questions">
+              {section.questions.map((q) => {
+                const errId = `${q.name}-error`;
+                if (q.type === 'consent') {
+                  return (
+                    <div class="qn-q" data-question data-required>
+                      <label class="qn-option qn-consent">
+                        <input class="qn-checkbox" type="checkbox" name={q.name} value="yes" aria-describedby={errId} />
+                        <span>
+                          {q.lines[0]}
+                          <br />
+                          {q.lines[1]}
+                        </span>
+                      </label>
+                      <p class="qn-error" id={errId} data-error aria-live="polite" />
+                    </div>
+                  );
+                }
+                const hintId = q.hint ? `${q.name}-hint` : undefined;
+                const describedBy = [hintId, errId].filter(Boolean).join(' ');
+                const aside = q.aside && <span class="qn-aside">{q.aside}</span>;
+                if (q.type === 'text') {
+                  const Tag = q.multiline ? 'textarea' : 'input';
+                  return (
+                    <div class="qn-q" data-question data-required={q.optional ? undefined : ''}>
+                      <div class="qn-head">
+                        <label class="qn-label" for={q.name}>
+                          {q.label} {aside}
+                        </label>
+                        {q.hint && (
+                          <p class="qn-hint" id={hintId}>
+                            {q.hint}
+                          </p>
+                        )}
+                      </div>
+                      <Tag
+                        class="qn-field"
+                        id={q.name}
+                        name={q.name}
+                        type={q.multiline ? undefined : (q.inputType ?? 'text')}
+                        rows={q.multiline ? 1 : undefined}
+                        placeholder={q.placeholder ?? 'Your answer'}
+                        autocomplete={q.autocomplete ?? 'off'}
+                        required={!q.optional}
+                        aria-describedby={describedBy}
+                        data-autogrow={q.multiline ? '' : undefined}
+                      />
+                      <p class="qn-error" id={errId} data-error aria-live="polite" />
+                    </div>
+                  );
+                }
+                return (
+                  <div
+                    class="qn-q qn-q--choice"
+                    data-question
+                    data-required={q.optional ? undefined : ''}
+                    role="group"
+                    aria-labelledby={`${q.name}-label`}
+                    aria-describedby={describedBy}
+                  >
+                    <div class="qn-head">
+                      <p class="qn-label" id={`${q.name}-label`}>
+                        {q.label} {aside}
+                      </p>
+                      {q.hint && (
+                        <p class="qn-hint" id={hintId}>
+                          {q.hint}
+                        </p>
+                      )}
+                    </div>
+                    <div class="qn-options">
+                      {q.options.map((opt) => (
+                        <label class="qn-option">
+                          <input class={`qn-${q.type}`} type={q.type} name={q.name} value={opt} />
+                          <span>{opt}</span>
+                        </label>
+                      ))}
+                      {q.other && (
+                        <div class="qn-option qn-option--other">
+                          <label class="qn-option">
+                            <input class={`qn-${q.type}`} type={q.type} name={q.name} value="Other" data-other-choice />
+                            <span>Other:</span>
+                          </label>
+                          <input
+                            class="qn-other"
+                            type="text"
+                            name={`${q.name}_other`}
+                            aria-label={`${q.label}: other`}
+                            autocomplete="off"
+                            data-other-text
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <p class="qn-error" id={errId} data-error aria-live="polite" />
+                  </div>
+                );
+              })}
+            </div>
+          </fieldset>
+        ))
+      }
+
+      <div class="qn-progress">
+        <div class="qn-nav">
+          <button type="button" class="qn-arrow qn-arrow--prev" data-prev aria-label="Previous section">
+            <Icon name="chevron" width={10} height={16} />
+          </button>
+          <button type="button" class="qn-arrow" data-next aria-label="Next section">
+            <Icon name="chevron" width={10} height={16} />
+          </button>
+        </div>
+        <div class="qn-bar">
+          <span class="qn-track"><span class="qn-fill" data-fill></span></span>
+          <span class="qn-count" data-count aria-live="polite">1 of {sections.length}</span>
+        </div>
+        <button type="submit" class="btn btn-primary qn-submit" data-submit>
+          Submit
+          <Icon name="send" size={24} />
+        </button>
+      </div>
+    </form>
+
+    <!-- Thank-you screen, shown after Submit -->
+    <div class="gr-thanks" data-thanks hidden>
+      <h2 class="h2 gr-thanks-title" tabindex="-1" data-thanks-title>
+        Thank you, <span data-first-name></span>. Your brief is with me.
+      </h2>
+      <p class="body">
+        I'll read it myself and send your Gap Review to <strong data-email></strong> within three working days. A short confirmation is already on its
+        way.
+      </p>
+      <hr class="divider gr-rule" />
+      <div class="gr-thanks-call">
+        <p class="qn-label">Rather talk sooner?</p>
+        <p class="body">
+          If you don't want to wait three days, book a {gapReview.callMinutes}-minute call. I'll have read your brief before we speak.
+        </p>
+      </div>
+      <a href={gapReview.bookCallUrl} class="btn btn-primary gr-call" target="_blank" rel="noopener">Book a call</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .gr {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding-block: calc(var(--nav-h) + 120px) 160px;
+    padding-inline: var(--inset);
+  }
+
+  /* ── Opening Screen (left column) ── */
+  .gr-open {
+    flex: 0 1 360px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    margin-top: -1px; /* Figma: title box starts 1px above the questionnaire */
+  }
+  .gr-open > * {
+    width: 100%;
+  }
+  .gr-open > .gr-start {
+    width: auto;
+  }
+  .gr[data-state='active'] [data-default] {
+    display: none;
+  }
+  /* Figma: 2px line with zero layout height */
+  .gr-rule {
+    border-top: 2px solid var(--dark-2);
+    margin-bottom: -2px;
+  }
+  .gr-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 17.5px; /* one empty 16.9px line in Figma, rounded to match the 238px text block */
+  }
+  .gr-copy ul {
+    margin: 0;
+    padding-left: 21px;
+  }
+  .gr-note {
+    color: var(--light-2);
+  }
+
+  /* ── Questionnaire (right column) ── */
+  .qn,
+  .gr-thanks {
+    flex: 0 1 522px;
+    min-width: 0;
+    scroll-margin-top: var(--space-sm);
+  }
+  .qn:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .qn-section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .qn-section:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .qn-title {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .qn-title .h2:focus,
+  .gr-thanks-title:focus {
+    outline: none;
+  }
+  .qn-questions {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .qn-q {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .qn-q--choice {
+    gap: 28px;
+  }
+  .qn-head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .qn-label {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    color: var(--light-1);
+  }
+  .qn-aside {
+    font-weight: 400;
+    font-style: italic;
+  }
+  .qn-hint {
+    font-size: 12px;
+    line-height: 1;
+    color: var(--light-3);
+  }
+
+  /* Text field (Figma "Form": Default / Hover / Active) */
+  .qn-field {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 10px 0;
+    border: 0;
+    border-bottom: 1px solid var(--dark-3);
+    border-radius: 0;
+    background: none;
+    color: var(--light-2);
+    font: inherit;
+    font-size: 14px;
+    line-height: normal;
+    resize: none;
+    overflow: hidden;
+    transition: border-color 0.2s var(--ease);
+  }
+  .qn-field::placeholder {
+    color: var(--dark-3);
+    opacity: 1;
+    transition: color 0.2s var(--ease);
+  }
+  .qn-field:focus {
+    outline: none;
+    border-color: var(--accent-3);
+  }
+  @media (hover: hover) {
+    .qn-field:not(:focus):hover {
+      border-color: var(--accent-4);
+    }
+    .qn-field:not(:focus):hover::placeholder {
+      color: var(--accent-4);
+    }
+  }
+
+  /* Radio + checkbox options */
+  .qn-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .qn-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    line-height: normal;
+    color: var(--light-2);
+    cursor: pointer;
+  }
+  .qn-option--other {
+    align-items: flex-end;
+    cursor: default;
+  }
+  .qn-option--other > .qn-option {
+    flex: none;
+  }
+  .qn-consent {
+    font-size: 12px;
+    line-height: 1;
+    color: var(--light-3);
+  }
+  .qn-radio,
+  .qn-checkbox {
+    appearance: none;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    border: 1px solid var(--dark-3);
+    background: none;
+    cursor: pointer;
+    transition:
+      border-color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+  .qn-radio {
+    border-radius: 50%;
+  }
+  .qn-radio::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-3);
+    transform: scale(0);
+    transition: transform 0.2s var(--ease);
+  }
+  .qn-radio:checked {
+    border-color: var(--accent-3);
+  }
+  .qn-radio:checked::after {
+    transform: scale(1);
+  }
+  .qn-checkbox {
+    border-radius: 2px;
+  }
+  .qn-checkbox::after {
+    content: '';
+    width: 10px;
+    height: 8px;
+    background: var(--dark-1);
+    -webkit-mask: url('../icons/checkmark.svg') no-repeat center / contain;
+    mask: url('../icons/checkmark.svg') no-repeat center / contain;
+    opacity: 0;
+  }
+  .qn-checkbox:checked {
+    border-color: var(--accent-3);
+    background: var(--accent-3);
+  }
+  .qn-checkbox:checked::after {
+    opacity: 1;
+  }
+  @media (hover: hover) {
+    .qn-option:hover .qn-radio:not(:checked),
+    .qn-option:hover .qn-checkbox:not(:checked) {
+      border-color: var(--accent-4);
+    }
+  }
+
+  /* "Other:" inline line */
+  .qn-other {
+    flex: 1;
+    min-width: 0;
+    height: 17px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--dark-3);
+    border-radius: 0;
+    background: none;
+    color: var(--light-2);
+    font: inherit;
+    font-size: 14px;
+    line-height: normal;
+    transition: border-color 0.2s var(--ease);
+  }
+  .qn-other:focus {
+    outline: none;
+    border-color: var(--accent-3);
+  }
+  @media (hover: hover) {
+    .qn-other:not(:focus):hover {
+      border-color: var(--accent-4);
+    }
+  }
+
+  .qn-error {
+    font-size: 12px;
+    line-height: 1;
+    color: var(--accent-3);
+  }
+  .qn-error:empty {
+    display: none;
+  }
+  .qn-q--choice .qn-error {
+    margin-top: -12px;
+  }
+
+  /* Progress row: arrows · bar · submit */
+  .qn-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .qn-nav {
+    display: flex;
+    gap: 20px;
+  }
+  .qn-arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--dark-3);
+    border-radius: 3px;
+    color: var(--dark-3);
+    transition:
+      border-color 0.2s var(--ease),
+      color 0.2s var(--ease);
+  }
+  .qn-arrow--prev :global(svg) {
+    transform: scaleX(-1);
+  }
+  @media (hover: hover) {
+    .qn-arrow:hover {
+      border-color: var(--accent-3);
+      color: var(--light-1);
+    }
+  }
+  .qn-bar {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .qn-track {
+    position: relative;
+    width: 174px;
+    height: 8px;
+    border-radius: 1px;
+    background: var(--dark-2);
+    overflow: hidden;
+  }
+  .qn-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 20%;
+    border-radius: 1px;
+    background: var(--accent-3);
+    transition: width 0.4s var(--ease);
+  }
+  .qn-count {
+    font-size: 12px;
+    line-height: 1;
+    color: var(--light-2);
+    white-space: nowrap;
+  }
+  .qn-submit {
+    padding: 12px 26px 12px 36px;
+  }
+  /* 24px icon sits inside the 41px button height, as in Figma */
+  .qn-submit :global(svg) {
+    margin-block: -3.5px;
+  }
+  .qn [data-off] {
+    visibility: hidden;
+  }
+
+  /* ── Thank-you screen (no Figma frame; built from the page's own styles) ── */
+  .gr-thanks:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+  .gr-thanks > * {
+    width: 100%;
+  }
+  .gr-thanks > .gr-call {
+    width: auto;
+  }
+  .gr-thanks-title {
+    line-height: 1.2;
+  }
+  .gr-thanks strong {
+    font-weight: 600;
+    color: var(--light-1);
+  }
+  .gr-thanks-call {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (max-width: 1079px) {
+    .gr {
+      flex-direction: column;
+      gap: var(--space-lg);
+      padding-block: calc(var(--nav-h) + var(--space-lg)) var(--space-xl);
+    }
+    .gr-open,
+    .qn,
+    .gr-thanks {
+      flex: none;
+      width: 100%;
+      max-width: 522px;
+    }
+    .gr-open {
+      margin-top: 0;
+    }
+  }
+  @media (max-width: 767px) {
+    .gr-start,
+    .gr-thanks > .gr-call {
+      width: 100%;
+    }
+    .gr-open > .gr-start {
+      width: 100%;
+    }
+    .qn-progress {
+      flex-wrap: wrap;
+    }
+    .qn-bar {
+      flex: 1;
+      min-width: 0;
+    }
+    .qn-track {
+      flex: 1;
+      width: auto;
+    }
+    .qn-submit {
+      flex-basis: 100%;
+    }
+    .qn .qn-submit[data-off] {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-gap-review]');
+  const form = root?.querySelector<HTMLFormElement>('[data-brief]');
+  if (root && form) {
+    const sections = [...form.querySelectorAll<HTMLFieldSetElement>('[data-section]')];
+    const prev = form.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = form.querySelector<HTMLButtonElement>('[data-next]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const fill = form.querySelector<HTMLElement>('[data-fill]')!;
+    const count = form.querySelector<HTMLElement>('[data-count]')!;
+    const thanks = root.querySelector<HTMLElement>('[data-thanks]')!;
+    let current = 0;
+
+    // A conditional section counts only when its trigger question has a matching answer.
+    // Until that question is answered, the section is counted in.
+    const isActive = (section: HTMLFieldSetElement) => {
+      const name = section.dataset.showIf;
+      if (!name) return true;
+      const answer = form.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
+      return !answer || (section.dataset.showValues ?? '').split('|').includes(answer.value);
+    };
+    const activeSections = () => sections.filter(isActive);
+
+    // Multi-line answers look like a single line and grow while typing.
+    const fit = (ta: HTMLTextAreaElement) => {
+      ta.style.height = 'auto';
+      ta.style.height = `${ta.scrollHeight + 1}px`;
+    };
+    form.querySelectorAll<HTMLTextAreaElement>('[data-autogrow]').forEach((ta) => ta.addEventListener('input', () => fit(ta)));
+
+    const setOff = (el: HTMLElement, off: boolean) => {
+      el.toggleAttribute('data-off', off);
+      el.toggleAttribute('disabled', off);
+    };
+
+    // Updates arrows, Submit, progress bar and section numbers for the current section.
+    const updateProgress = () => {
+      const active = activeSections();
+      const position = active.indexOf(sections[current]);
+      // A skipped section is disabled so it is neither validated nor sent.
+      sections.forEach((s) => (s.disabled = !active.includes(s)));
+      active.forEach((s, i) => (s.querySelector('[data-section-number]')!.textContent = `Section ${i + 1}`));
+      const last = position === active.length - 1;
+      setOff(prev, position === 0);
+      setOff(next, last);
+      setOff(submit, !last);
+      fill.style.width = `${((position + 1) / active.length) * 100}%`;
+      count.textContent = `${position + 1} of ${active.length}`;
+    };
+
+    const show = (index: number, focus = true) => {
+      current = index;
+      sections.forEach((s, i) => (s.hidden = i !== index));
+      // Hidden sections can't be measured, so size their fields once they are shown.
+      sections[index].querySelectorAll<HTMLTextAreaElement>('[data-autogrow]').forEach(fit);
+      updateProgress();
+      if (!focus) return;
+      const top = form.getBoundingClientRect().top;
+      if (top < 0 || top > innerHeight * 0.6) form.scrollIntoView({ block: 'start' });
+      sections[index].querySelector<HTMLElement>('[data-section-title]')?.focus({ preventScroll: true });
+    };
+
+    const step = (dir: 1 | -1) => {
+      const active = activeSections();
+      const target = active[active.indexOf(sections[current]) + dir];
+      if (target) show(sections.indexOf(target));
+    };
+
+    // Returns the error message for one question, or '' when it is answered.
+    const errorFor = (q: HTMLElement): string => {
+      const required = q.hasAttribute('data-required');
+      const field = q.querySelector<HTMLInputElement | HTMLTextAreaElement>('.qn-field');
+      if (field) {
+        if (!field.value.trim()) return required ? 'Required' : '';
+        return field.validity.typeMismatch ? 'Please enter a valid email' : '';
+      }
+      const checked = q.querySelector<HTMLInputElement>('input:checked');
+      if (!checked) return required ? 'Required' : '';
+      const otherText = q.querySelector<HTMLInputElement>('[data-other-text]');
+      if (checked.hasAttribute('data-other-choice') && otherText && !otherText.value.trim()) return 'Required';
+      return '';
+    };
+
+    const setError = (q: HTMLElement, message: string) => {
+      const error = q.querySelector<HTMLElement>('[data-error]');
+      if (error) error.textContent = message;
+      q.querySelectorAll('input, textarea').forEach((el) => el.toggleAttribute('aria-invalid', !!message));
+    };
+
+    const validate = (section: HTMLElement) => {
+      let first: HTMLElement | null = null;
+      section.querySelectorAll<HTMLElement>('[data-question]').forEach((q) => {
+        const message = errorFor(q);
+        setError(q, message);
+        if (message && !first) first = q;
+      });
+      if (first) (first as HTMLElement).querySelector<HTMLElement>('input, textarea')?.focus();
+      return !first;
+    };
+
+    // Start the Brief: Opening Screen goes from Default to Active and the questionnaire appears.
+    root.querySelector('[data-start]')?.addEventListener('click', () => {
+      root.dataset.state = 'active';
+      form.hidden = false;
+      show(0);
+    });
+
+    prev.addEventListener('click', () => step(-1));
+    next.addEventListener('click', () => {
+      if (validate(sections[current])) step(1);
+    });
+
+    form.addEventListener('input', (e) => {
+      const q = (e.target as HTMLElement).closest<HTMLElement>('[data-question]');
+      // Clear a question's error as soon as it is answered.
+      if (q?.querySelector('[data-error]')?.textContent) setError(q, errorFor(q));
+    });
+    // The product answer decides whether "The Product" section is part of the brief.
+    form.addEventListener('change', (e) => {
+      const name = (e.target as HTMLInputElement).name;
+      if (sections.some((s) => s.dataset.showIf === name)) updateProgress();
+    });
+
+    // Typing in "Other:" selects the Other option.
+    form.querySelectorAll<HTMLInputElement>('[data-other-text]').forEach((text) => {
+      text.addEventListener('input', () => {
+        const choice = text.closest('.qn-option--other')?.querySelector<HTMLInputElement>('[data-other-choice]');
+        if (choice && text.value.trim()) choice.checked = true;
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Enter in a field moves to the next section instead of submitting early.
+      if (submit.hasAttribute('data-off')) {
+        next.click();
+        return;
+      }
+      if (!validate(sections[current])) return;
+      // Sending the answers (email notification + Google Sheets) is connected later.
+      const data = new FormData(form);
+      const fullName = String(data.get('full_name') ?? '').trim();
+      thanks.querySelector('[data-first-name]')!.textContent = fullName.split(/\s+/)[0];
+      thanks.querySelector('[data-email]')!.textContent = String(data.get('email') ?? '').trim();
+      form.hidden = true;
+      thanks.hidden = false;
+      const top = thanks.getBoundingClientRect().top;
+      if (top < 0 || top > innerHeight * 0.6) thanks.scrollIntoView({ block: 'start' });
+      thanks.querySelector<HTMLElement>('[data-thanks-title]')?.focus({ preventScroll: true });
+    });
+
+    show(0, false);
+  }
+</script>

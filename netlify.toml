@@ -5,6 +5,12 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# The brief page was renamed; keep old links and QR codes working.
+[[redirects]]
+  from = "/the-positioning-brief/*"
+  to = "/the-gap-review/"
+  status = 301
+
 [[headers]]
   for = "/_astro/*"
   [headers.values]

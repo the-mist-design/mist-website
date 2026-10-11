@@ -6,7 +6,13 @@ export const site = {
   tagline: 'Brand Identity & Packaging Design for Brands Built to Last',
   description:
     "Brand identity and packaging design by Stefan, MIST. Complete brand systems made to last for generations, not trends.",
-  assessmentUrl: '/the-positioning-brief/',
+  gapReview: {
+    label: 'The Gap Review',
+    url: '/the-gap-review/',
+    // Shown on the thank-you screen after the brief is sent.
+    bookCallUrl: '#', // TODO: replace with the booking link (Calendly, Cal.com…)
+    callMinutes: 30,
+  },
   socials: [
     { name: 'Instagram', icon: 'instagram', url: 'https://www.instagram.com/the.mist.design/' },
     { name: 'TikTok', icon: 'tiktok', url: 'https://www.tiktok.com/@mistdesign' },

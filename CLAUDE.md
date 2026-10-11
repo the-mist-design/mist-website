@@ -5,7 +5,7 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 ## Projekat
 
 - Statički sajt u **Astro 5**, Node 22. Hosting: Netlify (`netlify.toml` je podešen).
-- Stranice: Home (`src/pages/index.astro`), tri case studija (`src/pages/case-study/[slug].astro` + podaci u `src/data/projects.ts`), placeholder za The Positioning Brief, 404.
+- Stranice: Home (`src/pages/index.astro`), tri case studija (`src/pages/case-study/[slug].astro` + podaci u `src/data/projects.ts`), The Gap Review upitnik (`src/pages/the-gap-review.astro`, ranije The Positioning Brief), 404.
 - Globalna podešavanja (email, društvene mreže, navigacija): `src/data/site.ts`.
 - Boje, fontovi i razmaci su tokeni u `src/styles/global.css` (`:root`). Koristi njih, ne nove boje.
 - Fontovi (Inter, Vollkorn Italic) su self-hosted preko `@fontsource`. Ne dodaji Google Fonts linkove.
@@ -24,7 +24,7 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 
 ## Poznate otvorene stavke (nisu greške)
 
-- The Positioning Brief: upitnik je napravljen po Figmi, ali Submit još ništa ne šalje. Čeka email adresu i Confirmation tekst (pa Google Sheets + mejlovi).
+- The Gap Review: upitnik i Thank-you ekran rade, ali Submit još ništa ne šalje (obaveštenje na mejl + Google Sheets dolaze kasnije). Link za "Book a call" je privremen (`src/data/site.ts` → `gapReview.bookCallUrl`).
 - "View All Projects" i All Projects strana su sakriveni.
 - Email `hello@mistdesign.co` je privremen. Prava adresa se menja u `src/data/site.ts`.
 - LinkedIn link, Privacy Policy, cookie banner i Google Analytics dolaze kasnije.

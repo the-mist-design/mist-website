@@ -24,6 +24,8 @@ Potreban je Node 22.
 | Thumbnail projekata | `src/assets/projects/` |
 | Boje, fontovi, razmaci | `src/styles/global.css` (`:root`) |
 | Hero, Social Proof, About, Testimonials | `src/components/` |
+| The Gap Review: naziv dugmeta, adresa, "Book a call" link | `src/data/site.ts` → `gapReview` |
+| The Gap Review: pitanja i sekcije | `src/pages/the-gap-review.astro` |
 
 Ako neka slika case studija (`img-N.jpg`) nedostaje, na tom mestu stoji prazan template.
 
@@ -37,6 +39,7 @@ Slike se pri build-u automatski smanjuju i pretvaraju u AVIF/WebP, pa originale 
 - **Slike projekata:** zoom in na hover.
 - **Click to copy email:** kopira adresu, tekst prelazi u "Copied!" na 2s.
 - **Contact** skroluje do CTA sekcije na trenutnoj strani; **Projects** i **About** vode na sekcije Home strane.
+- **The Gap Review:** na otvaranju se vidi samo uvod (Opening Screen). "Start the Brief" skraćuje uvod i otvara upitnik. Sekcija "The Product" se pojavljuje samo ako je odgovor na "Do you sell a physical product?" *Yes, a product* ili *Both*, pa upitnik ima 4 ili 5 sekcija (brojevi sekcija i progress se prilagođavaju). Posle Submit-a ide Thank-you ekran sa imenom i email-om iz upitnika. Stara adresa `/the-positioning-brief/` preusmerava na novu (`netlify.toml`).
 - Animacije se pauziraju dok je tab sakriven. Uz uključeno smanjeno kretanje (prefers-reduced-motion) prelazi su isključeni.
 
 ## Responsive
@@ -57,7 +60,7 @@ Za brz pregled bez Git-a: `npm run build`, pa prevuci folder `dist` na https://a
 
 ## Još nije urađeno
 
-- The Positioning Brief: upitnik (4 sekcije) radi, ali slanje odgovora (Submit → email / Google Sheets) i Confirmation poruka još nisu povezani.
+- The Gap Review (`/the-gap-review/`): upitnik (4 ili 5 sekcija) i Thank-you ekran rade, ali slanje odgovora (Submit → email / Google Sheets) još nije povezano. Link za "Book a call" se menja u `src/data/site.ts` → `gapReview.bookCallUrl`.
 - All Projects strana. Dugme "View All Projects" je sakriveno.
 - Privacy Policy, cookie banner i Google Analytics.
 - LinkedIn link.
