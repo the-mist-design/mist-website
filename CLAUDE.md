@@ -24,6 +24,6 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 
 ## Poznate otvorene stavke (nisu greške)
 
-- The Gap Review: upitnik i Thank-you ekran rade, ali Submit još ništa ne šalje (obaveštenje na mejl + Google Sheets dolaze kasnije). Link za "Book a call" je privremen (`src/data/site.ts` → `gapReview.bookCallUrl`).
+- The Gap Review: odgovori idu preko Netlify Forms (forma `gap-review`), a obaveštenje na stefan@mistdesign.co se podešava u Netlify-u (Forms → notifications). Potvrda posetiocu ("A short confirmation…") i Google Sheets još nisu povezani. Link za "Book a call" je privremen (`src/data/site.ts` → `gapReview.bookCallUrl`).
 - "View All Projects" i All Projects strana su sakriveni.
 - LinkedIn link, Privacy Policy, cookie banner i Google Analytics dolaze kasnije.

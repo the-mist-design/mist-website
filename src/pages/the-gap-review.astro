@@ -246,7 +246,13 @@ const { gapReview } = site;
       <button type="button" class="btn btn-primary gr-start" data-default data-start>Start the Brief</button>
     </div>
 
-    <form class="qn" data-brief novalidate hidden>
+    <!-- Netlify Forms: submissions are stored in Netlify and sent as an email notification (set up in the Netlify UI). -->
+    <form class="qn" name="gap-review" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-brief novalidate hidden>
+      <input type="hidden" name="form-name" value="gap-review" />
+      <input type="hidden" name="subject" value="New Gap Review brief" data-subject />
+      <p class="visually-hidden" aria-hidden="true">
+        <label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+      </p>
       {
         sections.map((section, s) => (
           <fieldset
@@ -386,6 +392,13 @@ const { gapReview } = site;
           <Icon name="send" size={24} />
         </button>
       </div>
+      <p
+        class="qn-error qn-send-error"
+        data-send-error
+        data-message={`Something went wrong and your brief wasn't sent. Please try again, or write to ${site.email}.`}
+        aria-live="polite"
+      >
+      </p>
     </form>
 
     <!-- Thank-you screen, shown after Submit -->
@@ -682,6 +695,10 @@ const { gapReview } = site;
   .qn-q--choice .qn-error {
     margin-top: -12px;
   }
+  .qn-send-error {
+    margin-top: -20px;
+    line-height: normal;
+  }
 
   /* Progress row: arrows · bar · submit */
   .qn-progress {
@@ -955,16 +972,46 @@ const { gapReview } = site;
       });
     });
 
-    form.addEventListener('submit', (e) => {
+    const sendError = form.querySelector<HTMLElement>('[data-send-error]')!;
+
+    // Netlify Forms expects one value per field, so "select all that apply" answers are joined.
+    const encode = (data: FormData) => {
+      const fields = new Map<string, string[]>();
+      data.forEach((value, key) => fields.set(key, [...(fields.get(key) ?? []), String(value)]));
+      return new URLSearchParams([...fields].map(([key, values]) => [key, values.join(', ')])).toString();
+    };
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       // Enter in a field moves to the next section instead of submitting early.
       if (submit.hasAttribute('data-off')) {
         next.click();
         return;
       }
-      if (!validate(sections[current])) return;
-      // Sending the answers (email notification + Google Sheets) is connected later.
+      if (!validate(sections[current]) || submit.disabled) return;
+
+      const business = (form.querySelector<HTMLInputElement>('#business_name')?.value ?? '').trim();
+      form.querySelector<HTMLInputElement>('[data-subject]')!.value = `New Gap Review brief: ${business}`;
+      // Read the answers before disabling the button: FormData skips disabled fields.
       const data = new FormData(form);
+      sendError.textContent = '';
+      submit.disabled = true;
+      submit.setAttribute('aria-busy', 'true');
+      try {
+        const res = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: encode(data),
+        });
+        if (!res.ok) throw new Error(`Form submission failed: ${res.status}`);
+      } catch {
+        sendError.textContent = sendError.dataset.message ?? '';
+        return;
+      } finally {
+        submit.disabled = false;
+        submit.removeAttribute('aria-busy');
+      }
+
       const fullName = String(data.get('full_name') ?? '').trim();
       thanks.querySelector('[data-first-name]')!.textContent = fullName.split(/\s+/)[0];
       thanks.querySelector('[data-email]')!.textContent = String(data.get('email') ?? '').trim();

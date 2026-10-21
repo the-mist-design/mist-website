@@ -60,7 +60,7 @@ Za brz pregled bez Git-a: `npm run build`, pa prevuci folder `dist` na https://a
 
 ## Još nije urađeno
 
-- The Gap Review (`/the-gap-review/`): upitnik (4 ili 5 sekcija) i Thank-you ekran rade, ali slanje odgovora (Submit → email / Google Sheets) još nije povezano. Link za "Book a call" se menja u `src/data/site.ts` → `gapReview.bookCallUrl`.
+- The Gap Review (`/the-gap-review/`): odgovori se šalju preko Netlify Forms (forma `gap-review`; vide se u Netlify-u pod **Forms**, a obaveštenje na mejl se podešava pod Forms → Form notifications). Još nisu povezani: potvrda na mejl posetiocu i Google Sheets. Link za "Book a call" se menja u `src/data/site.ts` → `gapReview.bookCallUrl`.
 - All Projects strana. Dugme "View All Projects" je sakriveno.
 - Privacy Policy, cookie banner i Google Analytics.
 - LinkedIn link.
