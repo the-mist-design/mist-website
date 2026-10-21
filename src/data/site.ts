@@ -2,7 +2,7 @@
 export const site = {
   name: 'MIST',
   url: 'https://mistdesign.co',
-  email: 'hello@mistdesign.co', // TODO: replace with the real address before launch
+  email: 'stefan@mistdesign.co',
   tagline: 'Brand Identity & Packaging Design for Brands Built to Last',
   description:
     "Brand identity and packaging design by Stefan, MIST. Complete brand systems made to last for generations, not trends.",
