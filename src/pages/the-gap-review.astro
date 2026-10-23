@@ -282,7 +282,8 @@ const { gapReview } = site;
                         <span>
                           {q.lines[0]}
                           <br />
-                          {q.lines[1]}
+                          {q.lines[1]} See the{' '}
+                          <a href="/privacy-policy/" target="_blank" rel="noopener" class="qn-consent-link">Privacy Policy</a>.
                         </span>
                       </label>
                       <p class="qn-error" id={errId} data-error aria-live="polite" />
@@ -596,6 +597,16 @@ const { gapReview } = site;
     font-size: 12px;
     line-height: 1;
     color: var(--light-3);
+  }
+  .qn-consent-link {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s var(--ease);
+  }
+  @media (hover: hover) {
+    .qn-consent-link:hover {
+      color: var(--accent-3);
+    }
   }
   .qn-radio,
   .qn-checkbox {

@@ -10,7 +10,7 @@ export const site = {
     label: 'The Gap Review',
     url: '/the-gap-review/',
     // Shown on the thank-you screen after the brief is sent.
-    bookCallUrl: '#', // TODO: replace with the booking link (Calendly, Cal.com…)
+    bookCallUrl: 'https://calendly.com/mistdesign/intro-call',
     callMinutes: 30,
   },
   socials: [

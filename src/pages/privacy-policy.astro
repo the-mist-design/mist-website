@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+// Legal details of the data controller (as registered).
+const controller = {
+  name: 'Stefan Milić PR Grafički dizajn MIST Dizajn Studio',
+  address: 'Stevana Sinđelića 109, 35208 Vojska, Serbia',
+  registrationNumber: '67724160',
+  taxId: '114623649',
+};
+const updated = '23 October 2026';
+---
+
+<Base title="Privacy Policy" description="How MIST collects, uses and protects your personal data." hideCta>
+  <article class="container legal">
+    <h1 class="h1">Privacy Policy</h1>
+    <p class="legal-updated">Last updated: {updated}</p>
+    <hr class="divider legal-rule" />
+
+    <div class="body legal-body">
+      <p>
+        This policy explains what personal data MIST collects through mistdesign.co, why, and what you can do about it. It applies to everyone who visits
+        the site, fills in The Gap Review brief, books a call or writes to me.
+      </p>
+
+      <h2>Who is responsible for your data</h2>
+      <p>
+        {controller.name}<br />
+        {controller.address}<br />
+        Company registration number: {controller.registrationNumber}<br />
+        Tax ID (PIB): {controller.taxId}<br />
+        Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+      <p>Throughout this policy, “MIST”, “I” and “me” refer to this business.</p>
+
+      <h2>What I collect</h2>
+      <ul>
+        <li>
+          <strong>The Gap Review brief:</strong> your name, business name and business email, and, if you choose to share them, your phone or WhatsApp
+          number, website or Instagram, and a link to files (for example WeTransfer). The brief also contains your answers about your business.
+        </li>
+        <li><strong>Emails:</strong> what you write to me, and my replies.</li>
+        <li>
+          <strong>Booked calls:</strong> when you book a call through Calendly, Calendly collects your name, email and the time you choose, and shares them
+          with me.
+        </li>
+        <li>
+          <strong>Technical data:</strong> my hosting provider records basic technical information, such as your IP address and browser, to keep the site
+          secure and working.
+        </li>
+      </ul>
+      <p>Please don't include sensitive personal data (such as health information) in the brief. It isn't needed.</p>
+
+      <h2>Why I use it, and on what basis</h2>
+      <ul>
+        <li>
+          <strong>To prepare and send your Gap Review</strong>, confirm that your brief arrived, and follow up about the review and a possible project. This
+          is a step you ask for before we may work together.
+        </li>
+        <li>
+          <strong>To send occasional emails from MIST</strong>, based on the consent you give in the brief. You can withdraw it at any time by replying
+          “unsubscribe” or writing to <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </li>
+        <li><strong>To answer your emails and prepare calls</strong> you book with me.</li>
+        <li><strong>To keep the site secure</strong>, which is in the legitimate interest of both of us.</li>
+        <li><strong>To meet legal obligations</strong>, such as accounting rules, if we work together.</li>
+      </ul>
+      <p>I don't sell your data, and I don't use it for automated decisions about you.</p>
+
+      <h2>Who processes it for me</h2>
+      <p>I use a few trusted services to run this site and my work. They process data on my behalf and only for these purposes:</p>
+      <ul>
+        <li><strong>Netlify</strong> hosts the site and receives the brief form.</li>
+        <li><strong>Google</strong> (Gmail and Google Sheets) stores the briefs and sends the confirmation email.</li>
+        <li><strong>GoDaddy</strong> provides my business email.</li>
+        <li><strong>Calendly</strong> handles call bookings.</li>
+      </ul>
+      <p>
+        Some of these companies are based outside Serbia and the European Economic Area, mainly in the United States. In those cases, the transfer is
+        protected by the safeguards the law requires, such as standard contractual clauses.
+      </p>
+
+      <h2>How long I keep it</h2>
+      <p>
+        I keep your brief and our emails for as long as we're in touch about your review or a project, and no longer than three years after our last
+        contact. If we work together, records needed for accounting are kept for as long as the law requires. You can ask me to delete your data sooner at
+        any time.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>You have the right to:</p>
+      <ul>
+        <li>ask what data I hold about you, and get a copy of it;</li>
+        <li>have it corrected or deleted;</li>
+        <li>restrict or object to how I use it;</li>
+        <li>receive it in a format you can take elsewhere;</li>
+        <li>withdraw your consent to emails at any time.</li>
+      </ul>
+      <p>
+        To use any of these rights, write to <a href={`mailto:${site.email}`}>{site.email}</a>. I'll reply within 30 days. You can also file a complaint with
+        the Commissioner for Information of Public Importance and Personal Data Protection of Serbia (<a
+          href="https://www.poverenik.rs"
+          target="_blank"
+          rel="noopener">poverenik.rs</a
+        >), or, if you live in the EU, with your local data protection authority.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        mistdesign.co doesn't currently use cookies for analytics or advertising. If that changes, this policy will be updated and you'll be asked for your
+        consent first.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>If I change how I handle your data, I'll update this page and the date at the top.</p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .legal {
+    padding-block: calc(var(--nav-h) + 120px) 160px;
+    padding-left: var(--inset);
+  }
+  .legal > * {
+    max-width: 640px;
+  }
+  .legal-updated {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--light-3);
+  }
+  .legal-rule {
+    margin-top: 28px;
+    border-top: 2px solid var(--dark-2);
+  }
+  .legal-body {
+    margin-top: 28px;
+  }
+  .legal-body > * + * {
+    margin-top: 17px;
+  }
+  .legal-body h2 {
+    margin-top: 40px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    color: var(--light-1);
+  }
+  .legal-body h2 + * {
+    margin-top: 12px;
+  }
+  .legal-body strong {
+    font-weight: 600;
+    color: var(--light-1);
+  }
+  .legal-body ul {
+    margin-block-end: 0;
+    padding-left: 21px;
+  }
+  .legal-body li + li {
+    margin-top: 8px;
+  }
+  .legal-body a {
+    color: var(--accent-3);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s var(--ease);
+  }
+  @media (hover: hover) {
+    .legal-body a:hover {
+      color: var(--light-1);
+    }
+  }
+  @media (max-width: 1079px) {
+    .legal {
+      padding-block: calc(var(--nav-h) + var(--space-lg)) var(--space-xl);
+    }
+  }
+</style>
