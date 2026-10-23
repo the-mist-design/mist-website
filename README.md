@@ -40,6 +40,7 @@ Slike se pri build-u automatski smanjuju i pretvaraju u AVIF/WebP, pa originale 
 - **Click to copy email:** kopira adresu, tekst prelazi u "Copied!" na 2s.
 - **Contact** skroluje do CTA sekcije na trenutnoj strani; **Projects** i **About** vode na sekcije Home strane.
 - **The Gap Review:** na otvaranju se vidi samo uvod (Opening Screen). "Start the Brief" skraćuje uvod i otvara upitnik. Sekcija "The Product" se pojavljuje samo ako je odgovor na "Do you sell a physical product?" *Yes, a product* ili *Both*, pa upitnik ima 4 ili 5 sekcija (brojevi sekcija i progress se prilagođavaju). Posle Submit-a ide Thank-you ekran sa imenom i email-om iz upitnika. Stara adresa `/the-positioning-brief/` preusmerava na novu (`netlify.toml`).
+- **Cookie banner + Google Analytics:** banner (dole levo, na telefonu preko cele širine) se pojavljuje dok posetilac ne izabere Accept ili Decline; izbor se pamti u browseru, a "Cookie settings" u footer-u ga ponovo otvara. GA se učitava tek posle Accept. Događaji: `generate_lead` (poslat Gap Review), `gap_review_click` (sa `location`: nav / mobile_menu / cta), `book_call_click`, `copy_email`, `email_click`.
 - Animacije se pauziraju dok je tab sakriven. Uz uključeno smanjeno kretanje (prefers-reduced-motion) prelazi su isključeni.
 
 ## Responsive

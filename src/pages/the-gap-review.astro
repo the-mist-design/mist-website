@@ -853,6 +853,8 @@ const { gapReview } = site;
 </style>
 
 <script>
+  import { track } from '../scripts/analytics';
+
   const root = document.querySelector<HTMLElement>('[data-gap-review]');
   const form = root?.querySelector<HTMLFormElement>('[data-brief]');
   if (root && form) {
@@ -1022,6 +1024,9 @@ const { gapReview } = site;
         submit.disabled = false;
         submit.removeAttribute('aria-busy');
       }
+
+      // The main goal in Google Analytics. No answers or personal data are sent with it.
+      track('generate_lead', { form: 'gap_review', physical_product: String(data.get('physical_product') ?? '') });
 
       const fullName = String(data.get('full_name') ?? '').trim();
       thanks.querySelector('[data-first-name]')!.textContent = fullName.split(/\s+/)[0];

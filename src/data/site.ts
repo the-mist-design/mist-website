@@ -6,6 +6,10 @@ export const site = {
   tagline: 'Brand Identity & Packaging Design for Brands Built to Last',
   description:
     "Brand identity and packaging design by Stefan, MIST. Complete brand systems made to last for generations, not trends.",
+  // Google Analytics 4 (loads only after cookie consent). The ID is public, not a secret.
+  analytics: {
+    measurementId: 'G-LES9EWYTED',
+  },
   gapReview: {
     label: 'The Gap Review',
     url: '/the-gap-review/',

@@ -26,4 +26,4 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 
 - The Gap Review: odgovori idu preko Netlify Forms (forma `gap-review`). Obaveštenje na stefan@mistdesign.co šalje Netlify; upis u Google Sheets "The Gap Review - Brief" i potvrdu posetiocu (Email 0) radi Google Apps Script iz `integrations/gap-review-sheet.gs`, koji Netlify poziva preko outgoing webhook-a.
 - "View All Projects", All Projects strana i LinkedIn link čekaju Stefanov znak.
-- Cookie banner i Google Analytics dolaze sledeći. Kad se uvedu, ažuriraj sekciju Cookies u `src/pages/privacy-policy.astro`.
+- Google Analytics 4 (`G-LES9EWYTED`, `src/data/site.ts` → `analytics`) se učitava samo posle "Accept" u cookie banneru (`src/components/CookieBanner.astro`, `src/scripts/analytics.ts`). Nove kolačiće ili alate za praćenje uvek dodaj i u sekciju "Cookies and analytics" u `src/pages/privacy-policy.astro`.

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import ContactCta from '../components/ContactCta.astro';
 import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -55,10 +56,13 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
       )
     }
     <Footer />
+    <CookieBanner />
 
     <script>
       import { initRotators } from '../scripts/rotator';
+      import { initAnalytics } from '../scripts/analytics';
       initRotators();
+      initAnalytics();
     </script>
     <script>
       import { site } from '../data/site';
