@@ -1,6 +1,6 @@
 # MIST — website
 
-Statički sajt (Astro 5) za mistdesign.co: Home i tri case studija (Ukusi Morave, MASTER, Dva lica).
+Statički sajt (Astro 7) za mistdesign.co: Home, tri case studija (Ukusi Morave, MASTER, Dva lica), The Gap Review upitnik i Privacy Policy.
 
 ## Pokretanje
 
@@ -11,7 +11,7 @@ npm run build     # produkcija u folder dist/
 npm run preview   # pregled build-a
 ```
 
-Potreban je Node 22.
+Potreban je Node 22.23 ili noviji (Astro 7).
 
 ## Gde se šta menja
 
@@ -52,9 +52,9 @@ Slike se pri build-u automatski smanjuju i pretvaraju u AVIF/WebP, pa originale 
 
 `netlify.toml` je podešen (build: `npm run build`, publish: `dist`).
 
-1. Postavi ovaj folder na GitHub repozitorijum.
-2. Na Netlify-u izaberi **Add new site → Import from Git** i taj repozitorijum.
-3. Netlify sam pokreće build na svaki push.
+Repozitorijum je `the-mist-design/mist-website` na GitHub-u, povezan sa Netlify projektom **mist-website** (domen mistdesign.co, DNS ostaje kod GoDaddy-ja: A `@` → `75.2.60.5`, CNAME `www` → `mist-website.netlify.app`). Svaki push na `main` Netlify sam objavljuje.
+
+**The Gap Review tok:** forma `gap-review` (Netlify Forms) → mejl obaveštenje (Netlify, Forms → Form notifications) + outgoing webhook na Google Apps Script (`integrations/gap-review-sheet.gs`, u tabeli "The Gap Review - Brief") → novi red u tabeli + Email 0 posetiocu.
 
 Za brz pregled bez Git-a: `npm run build`, pa prevuci folder `dist` na https://app.netlify.com/drop
 

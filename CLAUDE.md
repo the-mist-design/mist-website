@@ -4,7 +4,7 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 
 ## Projekat
 
-- Statički sajt u **Astro 5**, Node 22. Hosting: Netlify (`netlify.toml` je podešen).
+- Statički sajt u **Astro 7**, Node 22 (najmanje 22.23). Hosting: Netlify (`netlify.toml` je podešen), domen mistdesign.co.
 - Stranice: Home (`src/pages/index.astro`), tri case studija (`src/pages/case-study/[slug].astro` + podaci u `src/data/projects.ts`), The Gap Review upitnik (`src/pages/the-gap-review.astro`, ranije The Positioning Brief), 404.
 - Globalna podešavanja (email, društvene mreže, navigacija): `src/data/site.ts`.
 - Boje, fontovi i razmaci su tokeni u `src/styles/global.css` (`:root`). Koristi njih, ne nove boje.
@@ -24,6 +24,6 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 
 ## Poznate otvorene stavke (nisu greške)
 
-- The Gap Review: odgovori idu preko Netlify Forms (forma `gap-review`), a obaveštenje na stefan@mistdesign.co se podešava u Netlify-u (Forms → notifications). Potvrda posetiocu ("A short confirmation…") i Google Sheets još nisu povezani. Link za "Book a call" je privremen (`src/data/site.ts` → `gapReview.bookCallUrl`).
-- "View All Projects" i All Projects strana su sakriveni.
-- LinkedIn link, Privacy Policy, cookie banner i Google Analytics dolaze kasnije.
+- The Gap Review: odgovori idu preko Netlify Forms (forma `gap-review`). Obaveštenje na stefan@mistdesign.co šalje Netlify; upis u Google Sheets "The Gap Review - Brief" i potvrdu posetiocu (Email 0) radi Google Apps Script iz `integrations/gap-review-sheet.gs`, koji Netlify poziva preko outgoing webhook-a.
+- "View All Projects", All Projects strana i LinkedIn link čekaju Stefanov znak.
+- Cookie banner i Google Analytics dolaze sledeći. Kad se uvedu, ažuriraj sekciju Cookies u `src/pages/privacy-policy.astro`.
