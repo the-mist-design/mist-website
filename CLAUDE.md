@@ -24,6 +24,6 @@ Vlasnik projekta je Stefan, brand identity dizajner (MIST). Ne programira: obja�
 
 ## Poznate otvorene stavke (nisu greške)
 
-- The Gap Review: odgovori idu preko Netlify Forms (forma `gap-review`). Obaveštenje na stefan@mistdesign.co šalje Netlify; upis u Google Sheets "The Gap Review - Brief" i potvrdu posetiocu (Email 0) radi Google Apps Script iz `integrations/gap-review-sheet.gs`, koji Netlify poziva preko outgoing webhook-a.
+- The Gap Review: odgovori idu preko Netlify Forms (forma `gap-review`). Obaveštenje na stefan@mistdesign.co šalje Netlify; upis u Google Sheets "The Gap Review - Brief" i potvrdu posetiocu (Email 0) radi Google Apps Script iz `integrations/gap-review-sheet.gs`. Poziva ga Netlify funkcija `netlify/functions/submission-created.mjs` (adresa skripte je u Netlify env varijabli `GAP_REVIEW_SHEET_URL`). Ne koristi Netlify "Outgoing webhook" za ovo: Apps Script odgovara preusmerenjem, Netlify to broji kao grešku, ponavlja slanje (duplikati) i na kraju gasi webhook.
 - "View All Projects", All Projects strana i LinkedIn link čekaju Stefanov znak.
 - Google Analytics 4 (`G-LES9EWYTED`, `src/data/site.ts` → `analytics`) se učitava samo posle "Accept" u cookie banneru (`src/components/CookieBanner.astro`, `src/scripts/analytics.ts`). Nove kolačiće ili alate za praćenje uvek dodaj i u sekciju "Cookies and analytics" u `src/pages/privacy-policy.astro`.

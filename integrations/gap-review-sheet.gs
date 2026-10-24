@@ -2,8 +2,8 @@
  * The Gap Review: Netlify Forms → Google Sheets + confirmation email (Email 0).
  *
  * Lives in the Google Sheet "The Gap Review - Brief" (Extensions → Apps Script) and runs as a web app.
- * Netlify sends every new "gap-review" submission here through an outgoing webhook
- * (Forms → Form notifications), with ?key=… in the URL. The key itself is stored only in
+ * The Netlify function netlify/functions/submission-created.mjs forwards every new "gap-review"
+ * submission here, with ?key=… in the URL. The key itself is stored only in
  * Project Settings → Script Properties as WEBHOOK_KEY, never in this file.
  */
 
@@ -53,24 +53,35 @@ function doPost(e) {
 
   const payload = JSON.parse(e.postData.contents);
   if (payload.form_name && payload.form_name !== 'gap-review') return respond('ignored');
-  saveBrief(payload.data || {}, payload.created_at ? new Date(payload.created_at) : new Date());
+  saveBrief(payload.data || {}, payload.created_at ? new Date(payload.created_at) : new Date(), payload.id);
   return respond('ok');
 }
 
-/** Appends the brief as a row, then sends Email 0 and records the result in "Confirmation sent". */
-function saveBrief(data, submitted) {
+/**
+ * Appends the brief as a row, then sends Email 0 and records the result in "Confirmation sent".
+ * Netlify retries the webhook when it gets Apps Script's redirect reply, so the same submission can
+ * arrive several times: a submission ID that is already in the sheet is skipped.
+ */
+function saveBrief(data, submitted, submissionId) {
   const delivery = addWorkingDays(submitted, WORKING_DAYS_TO_DELIVERY);
   const firstName = String(data.full_name || '').trim().split(/\s+/)[0];
+  const id = String(submissionId || '');
 
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
     const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
     const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const idColumn = headers.indexOf('Submission ID') + 1;
+    if (id && idColumn > 0 && sheet.getLastRow() > 1) {
+      const known = sheet.getRange(2, idColumn, sheet.getLastRow() - 1, 1).getValues().flat().map(String);
+      if (known.indexOf(id) !== -1) return;
+    }
     const row = headers.map((header) => {
       if (header === 'Submitted') return submitted;
       if (header === 'Delivery date') return delivery;
       if (header === 'First name') return asText(firstName);
+      if (header === 'Submission ID') return id;
       return COLUMNS[header] ? asText(data[COLUMNS[header]]) : '';
     });
     sheet.appendRow(row);

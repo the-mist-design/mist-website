@@ -55,7 +55,7 @@ Slike se pri build-u automatski smanjuju i pretvaraju u AVIF/WebP, pa originale 
 
 Repozitorijum je `the-mist-design/mist-website` na GitHub-u, povezan sa Netlify projektom **mist-website** (domen mistdesign.co, DNS ostaje kod GoDaddy-ja: A `@` → `75.2.60.5`, CNAME `www` → `mist-website.netlify.app`). Svaki push na `main` Netlify sam objavljuje.
 
-**The Gap Review tok:** forma `gap-review` (Netlify Forms) → mejl obaveštenje (Netlify, Forms → Form notifications) + outgoing webhook na Google Apps Script (`integrations/gap-review-sheet.gs`, u tabeli "The Gap Review - Brief") → novi red u tabeli + Email 0 posetiocu.
+**The Gap Review tok:** forma `gap-review` (Netlify Forms) → mejl obaveštenje (Netlify, Forms → Form notifications) + Netlify funkcija `netlify/functions/submission-created.mjs`, koja brief prosleđuje Google Apps Script-u (`integrations/gap-review-sheet.gs`, u tabeli "The Gap Review - Brief"; adresa u env varijabli `GAP_REVIEW_SHEET_URL`) → novi red u tabeli + Email 0 posetiocu. Skripta preskače brief koji je već upisan (kolona "Submission ID").
 
 Za brz pregled bez Git-a: `npm run build`, pa prevuci folder `dist` na https://app.netlify.com/drop
 
