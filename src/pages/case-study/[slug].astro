@@ -16,6 +16,12 @@ const { project: p } = Astro.props;
 const next = getNextProject(p.slug);
 const img = p.images;
 const alt = p.imageAlts;
+
+// The next-project thumbnail is a 3:2 photo cropped into a square, so it is drawn wider than its box.
+// Box width: 197px, or the full card on phones (page gutters + card padding = 72px).
+const nextScale = Math.max(1, next.thumbnail.width / next.thumbnail.height);
+const nextWidths = [197, 394, 591, 788, 1182].map((w) => Math.round(w * nextScale));
+const nextSizes = `(max-width: 767px) calc((100vw - 72px) * ${nextScale}), ${Math.round(197 * nextScale)}px`;
 ---
 
 <Base title={`${p.name} Case Study`} description={p.summary}>
@@ -132,8 +138,8 @@ const alt = p.imageAlts;
         <Picture
           src={next.thumbnail}
           alt=""
-          widths={[197, 394, 591]}
-          sizes="197px"
+          widths={nextWidths}
+          sizes={nextSizes}
           formats={['avif', 'webp']}
           style={next.thumbnailPosition ? `object-position:${next.thumbnailPosition}` : undefined}
         />
