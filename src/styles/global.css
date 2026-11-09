@@ -7,6 +7,8 @@
 @import '@fontsource/inter/latin-ext-600.css';
 @import '@fontsource/vollkorn/latin-400-italic.css';
 @import '@fontsource/vollkorn/latin-ext-400-italic.css';
+@import '@fontsource/vollkorn/latin-500.css';
+@import '@fontsource/vollkorn/latin-ext-500.css';
 
 /* ───────── Design tokens (from Figma styles) ───────── */
 :root {
@@ -159,6 +161,7 @@ p {
   color: var(--light-1);
 }
 .h2 {
+  font-family: var(--font-serif);
   font-size: var(--h2);
   font-weight: 500;
   line-height: 1;

@@ -11,6 +11,12 @@
   to = "/the-gap-review/"
   status = 301
 
+# Old Webflow address that is still in Google.
+[[redirects]]
+  from = "/dva-lica-case-study"
+  to = "/case-study/dva-lica/"
+  status = 301
+
 [[headers]]
   for = "/_astro/*"
   [headers.values]
